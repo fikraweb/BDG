@@ -27,6 +27,17 @@ function ServiceIcon({id,size=40}:{id:string;size?:number}) {if(isDocumentKind(i
 const paths: Record<string,string> = {access:"/",register:"/inscription",hub:"/marches-publics",remise:"/remise",requests:"/demandes",facture:"/demandes?type=facture",livraison:"/demandes?type=livraison",echantillons:"/demandes?type=echantillons"};
 async function api(action:string,data:Record<string,unknown>={}) {await initializeClientVisit();const r=await fetch("/api/tawzala",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,...data})});const result=await r.json() as ApiReply;if(!r.ok)throw Object.assign(new Error(result.error||"La demande n’a pas pu être enregistrée."),{status:r.status});return result;}
 function Brand({large=false,name=BRAND_NAME}:{large?:boolean;name?:string}) {return <span className={`brand ${large?"brand-large":""}`} aria-label={name}><img className="brand-crown" src="/images/tawzala-crown.png" width={104} height={64} alt="" aria-hidden="true"/><span className="brand-word">{name.split("🕸").map((word,i)=><span key={i}>{i>0&&<span className="brand-web">🕸</span>}{word}</span>)}</span></span>;}
+function AccessStrip({label, paused, children, onToggle}:{label:string;paused:boolean;children:React.ReactNode;onToggle?:()=>void}) {
+ return <div className="access-strip" data-paused={paused}>
+  <span className="sr-only">{label}</span>
+  <div className="access-strip-track" aria-hidden="true">
+   {[0, 1].map(group=><div className="access-strip-group" key={group}>
+    {[0, 1, 2].map(item=><span className="access-strip-item" key={item}>{children}</span>)}
+   </div>)}
+  </div>
+  {onToggle&&<button type="button" className="access-strip-pause" onClick={onToggle} aria-label={paused?"Reprendre le défilement des bandeaux":"Mettre les bandeaux en pause"}>{paused?<Play size={17}/>:<Pause size={17}/>}</button>}
+ </div>;
+}
 function Field({label,icon,children}:{label:string;icon?:React.ReactNode;children:React.ReactNode}) {return <label className="field"><span>{label}</span><span className="input-wrap">{icon&&<span className="input-icon">{icon}</span>}{children}</span></label>;}
 function ProcurementField({buyer}:{buyer:Buyer|null}) {
  return <Field label="Cadre d’achat"><select className="procurement-select" name="procurementType" required defaultValue={buyer?.procurementType||""}><option value="" disabled>Choisissez votre cadre d’achat</option>{Object.entries(PROCUREMENT_OPTIONS).map(([value,label])=><option value={value} key={value}>{label}</option>)}</select></Field>;
@@ -115,7 +126,7 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
  const [welcomePaused,setWelcomePaused]=useState(false);
  const access=screen==="access"||screen==="register";
 
- return <><TooltipProvider delayDuration={180}><Toaster position="top-center" theme="light"/><header className={`site-header${access?" access-header":""}${screen==="access"?" access-header-emblem":""}`}>{screen==="access"?<img className="access-flag" src="/images/morocco-flag.svg" width={60} height={40} alt="Drapeau du Maroc"/>:<button className="brand-link" onClick={()=>go(authenticated&&buyer?"hub":"access")} aria-label={brandName+" — Accueil"}><Brand name={brandName}/></button>}{access?(screen==="register"?<span className="header-private" aria-label="Espace privé"><ShieldCheck size={17}/><span>Espace privé</span></span>:null):<><nav className="desktop-nav" aria-label="Navigation principale">{navigation.map(([id,label])=><Tooltip key={id}><TooltipTrigger asChild><button className={(screen==="requests"?documentKind:screen)===id?"active":""} aria-label={label} aria-current={(screen==="requests"?documentKind:screen)===id?"page":undefined} onClick={()=>go(id)}><ServiceIcon id={id}/></button></TooltipTrigger><TooltipContent side="bottom" sideOffset={10}>{label}</TooltipContent></Tooltip>)}</nav><div className="header-actions"><button className="user-name account-trigger" onClick={()=>setAccountOpen(true)} disabled={!buyer||!hasAccount} aria-label="Ouvrir mon compte"><UserRound size={16}/><span>{buyer?.name.split(" ")[0]}</span></button><button className="icon-button logout-desktop" aria-label="Se déconnecter" onClick={logout} disabled={busy}><LogOut size={19}/></button><button className="icon-button mobile-toggle" aria-label="Ouvrir le menu" onClick={()=>setMenuOpen(true)}><Menu size={23}/></button></div></>}</header>
+ return <><TooltipProvider delayDuration={180}><Toaster position="top-center" theme="light"/><header className={`site-header${access?" access-header":""}${screen==="access"?" access-header-emblem":""}`}>{screen==="access"?<AccessStrip label="Drapeau du Maroc" paused={welcomePaused}><img className="access-flag" src="/images/morocco-flag.svg" width={60} height={40} alt=""/></AccessStrip>:<button className="brand-link" onClick={()=>go(authenticated&&buyer?"hub":"access")} aria-label={brandName+" — Accueil"}><Brand name={brandName}/></button>}{access?(screen==="register"?<span className="header-private" aria-label="Espace privé"><ShieldCheck size={17}/><span>Espace privé</span></span>:null):<><nav className="desktop-nav" aria-label="Navigation principale">{navigation.map(([id,label])=><Tooltip key={id}><TooltipTrigger asChild><button className={(screen==="requests"?documentKind:screen)===id?"active":""} aria-label={label} aria-current={(screen==="requests"?documentKind:screen)===id?"page":undefined} onClick={()=>go(id)}><ServiceIcon id={id}/></button></TooltipTrigger><TooltipContent side="bottom" sideOffset={10}>{label}</TooltipContent></Tooltip>)}</nav><div className="header-actions"><button className="user-name account-trigger" onClick={()=>setAccountOpen(true)} disabled={!buyer||!hasAccount} aria-label="Ouvrir mon compte"><UserRound size={16}/><span>{buyer?.name.split(" ")[0]}</span></button><button className="icon-button logout-desktop" aria-label="Se déconnecter" onClick={logout} disabled={busy}><LogOut size={19}/></button><button className="icon-button mobile-toggle" aria-label="Ouvrir le menu" onClick={()=>setMenuOpen(true)}><Menu size={23}/></button></div></>}</header>
  {access?<main className={`access-layout access-blue${screen==="access"?" access-minimal access-emblem":""}`}>
   <section className="access-form-panel"><div className="access-card">
    {screen==="register"&&<>
@@ -172,16 +183,10 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
    <span>© {new Date().getFullYear()} {brandName}</span>
    <a href="https://commons.wikimedia.org/wiki/File:Coat_of_arms_of_Morocco_(simple).svg" target="_blank" rel="noreferrer">Crédits de l’emblème</a>
   </footer>
-  <div className="access-bdg-strip"><Brand name={brandName}/></div>
-  <div className="access-welcome" data-paused={welcomePaused}>
-   <span className="sr-only">Bienvenue acheteur public</span>
-   <div className="access-welcome-track" aria-hidden="true">
-    {[0, 1].map(group=><div className="access-welcome-group" key={group}>
-     {[0, 1, 2].map(item=><span key={item}><i>Bienvenue</i> acheteur public</span>)}
-    </div>)}
-   </div>
-   <button type="button" className="access-welcome-pause" onClick={()=>setWelcomePaused(!welcomePaused)} aria-label={welcomePaused?"Reprendre le défilement":"Mettre le défilement en pause"}>{welcomePaused?<Play size={17}/>:<Pause size={17}/>}</button>
-  </div>
+  <AccessStrip label={brandName} paused={welcomePaused}><Brand name={brandName}/></AccessStrip>
+  <AccessStrip label="Bienvenue acheteur public" paused={welcomePaused} onToggle={()=>setWelcomePaused(paused=>!paused)}>
+   <i>Bienvenue</i> acheteur public
+  </AccessStrip>
  </>}
  </main>:!ready||!buyer?<main className="page-width loading-page"><Skeleton className="h-12 w-72 mb-8"/><Skeleton className="h-72 w-full"/><p>Chargement de votre espace…</p>{error&&<p role="alert">{error}</p>}</main>:<><div className="session-strip"><span><ShieldCheck size={14}/>Espace acheteur public</span><span>Bienvenue, {buyer.name}</span></div>
  {screen==="hub"&&<main className="page-width hub-page compact-hub"><h1 className="sr-only">Services BDG</h1>
