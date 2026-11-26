@@ -353,7 +353,7 @@
 @media(min-width:1000px){.admin-main{padding-left:250px;position:relative}.admin-side-menu{position:fixed;left:24px;top:130px;width:205px;height:auto;display:flex;flex-direction:column;align-items:stretch;gap:8px;background:#102f50;padding:16px;border-radius:14px;z-index:20}.admin-side-menu [role=tab]{width:100%;justify-content:flex-start;color:#e8eff7;padding:14px 12px;border-radius:8px;font-size:14px}.admin-side-menu [role=tab][data-active],.admin-side-menu [role=tab][data-state=active]{background:#fff;color:#102f50}.admin-side-menu [role=tab]::after{display:none}}
 
 @media (min-width: 761px) {
-  .compact-hub .service-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .compact-hub .service-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 :root {
@@ -674,3 +674,47 @@
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
+
+
+.compact-hub .service-tile {
+  color: #0e2b45;
+  background: linear-gradient(145deg, #fff, #f1f6fa);
+}
+.compact-hub .service-tile:hover,
+.compact-hub .service-tile:focus-visible {
+  border-color: #b79b64;
+  background: #f3f7fa;
+}
+.service-extra-icon { color: #193f52; }
+.service-tile-caution .tile-icon,
+.service-tile-references .tile-icon,
+.service-tile-reglementation .tile-icon {
+  background: radial-gradient(ellipse at 50% 38%, #fffdf5, #ece4ca 82%);
+}
+.service-tile-echanges .tile-icon,
+.service-tile-autres .tile-icon {
+  background: radial-gradient(ellipse at 50% 38%, #f9fffd, #dbeee9 82%);
+}
+.service-tile-echanges .service-extra-icon,
+.service-tile-autres .service-extra-icon { color: #245641; }
+.hub-contact {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #174936;
+  color: #fff;
+  box-shadow: 0 4px 14px #143a3533;
+}
+.buyer-service-form { max-width: 720px; }
+.buyer-service-form fieldset, .buyer-service-inbox { display: grid; gap: 14px; }
+.buyer-service-form .primary-button { justify-self: start; }
+.buyer-service-form a, .buyer-service-inbox a { text-decoration: underline; }
+.buyer-service-form dl > div { display: grid; grid-template-columns: minmax(7rem, 30%) 1fr; gap: 12px; padding-block: 8px; }
+.buyer-service-form dt { font-weight: 650; }
+.buyer-service-message { white-space: pre-wrap; overflow-wrap: anywhere; }

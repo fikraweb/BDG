@@ -75,3 +75,10 @@ export function finishClientPage() {
   initialization = null;
   internalExit = false;
 }
+
+export function prepareCatalogueReturn() {
+  if (!readVisit()) return;
+  try {
+    sessionStorage.setItem(CONTINUATION, JSON.stringify({ route: "/marches-publics", expiresAt: Date.now() + 120000 }));
+  } catch { /* The access gate handles a fresh visit. */ }
+}

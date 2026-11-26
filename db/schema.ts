@@ -32,3 +32,12 @@ export const documentRequests = sqliteTable("document_requests", {
   companyDelivery: text("company_delivery"), customerDelivery: text("customer_delivery"), companyError: text("company_error"), customerError: text("customer_error"), issued: text("issued"), pdfKey: text("pdf_key"), documentNumber: text("document_number"),
   createdAt: integer("created_at").notNull(), updatedAt: integer("updated_at").notNull(),
 }, t => [index("idx_document_requests_buyer_created").on(t.buyerId, t.createdAt), index("idx_document_requests_created").on(t.createdAt), uniqueIndex("idx_document_requests_number").on(t.kind, t.documentNumber)]);
+
+export const buyerServiceRequests = sqliteTable("buyer_service_requests", {
+  id: text("id").primaryKey(),
+  buyerId: text("buyer_id").notNull().references(() => buyers.id),
+  kind: text("kind").notNull(),
+  subject: text("subject").notNull(),
+  message: text("message").notNull(),
+  createdAt: integer("created_at").notNull(),
+}, t => [index("idx_buyer_service_requests_created").on(t.createdAt)]);

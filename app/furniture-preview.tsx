@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Menu } from "lucide-react";
+import { ArrowLeft, Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { prepareCatalogueReturn } from "@/lib/client-visit";
 import { money } from "@/lib/catalog";
 import { furnitureCategories, type PreviewPhoto } from "@/lib/furniture-preview";
 
@@ -14,6 +15,12 @@ function FurniturePhoto({ photo }: { photo: PreviewPhoto }) {
     {displayed && <img src={displayed.image} alt={displayed.label} loading="lazy" onError={() => setFailed(true)}/>}
     {displayed && <figcaption>{money(displayed.price)}</figcaption>}
   </figure>;
+}
+
+export function CatalogueBackLink({ fromServices }: { fromServices: boolean }) {
+  return <a className="furniture-catalogue-back" href={fromServices ? "/marches-publics" : "/"} onClick={fromServices ? prepareCatalogueReturn : undefined}>
+    <ArrowLeft size={18} aria-hidden="true"/>{fromServices ? "Retour aux services" : "Retour à l’accès"}
+  </a>;
 }
 
 export function FurnitureGallery({ photos }: { photos: PreviewPhoto[] }) {

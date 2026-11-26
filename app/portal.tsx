@@ -1,9 +1,11 @@
 "use client";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import BuyerService from "@/app/buyer-service";
+import { extraServices, isExtraService } from "@/lib/buyer-services";
 import FurniturePreview from "@/app/furniture-preview";
 import { flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
-import { LockKeyhole, Eye, EyeOff, ShieldCheck, LogOut, Calculator, Clock, CheckCircle2, ChevronRight, Building2, UserRound, Mail, Phone, Loader2, Menu, Download, BadgePercent, Pause, Play } from "lucide-react";
+import { LockKeyhole, Eye, EyeOff, ShieldCheck, LogOut, Calculator, Clock, CheckCircle2, ChevronRight, Building2, UserRound, Mail, Phone, Loader2, Menu, Download, BadgePercent, Pause, Play, FileCheck2, Scale, MessagesSquare, BriefcaseBusiness } from "lucide-react";
 import { initializeClientVisit, endClientVisit, finishClientPage, isInternalVisitExit, prepareAdminVisit, forgetClientContinuation } from "@/lib/client-visit";
 import { DOCUMENT_TYPES, isDocumentKind, type DocumentKind } from "@/lib/document-types";
 import DocumentRequests from "@/app/document-requests";
@@ -23,9 +25,30 @@ import type { SiteSettings, SiteStore } from "@/lib/site-types";
 import { BRAND_NAME } from "@/lib/company";
 
 type ApiReply = { error?: string; next: string; buyer: Buyer | null; authenticated: boolean; hasAccount: boolean; orderId: string; total?: number; summary?: PriceQuote; pdfUrl?: string; notification?: string; customerNotification?: string; store?: SiteStore; isAdmin?: boolean };
-const navigation = [["remise","Remise d’achat"],["facture","Demande de facture"],["livraison","Demande de bon de livraison"],["echantillons","Demande de bon de livraison des échantillons"]];
-function ServiceIcon({id,size=40}:{id:string;size?:number}) {if(isDocumentKind(id))return <img className="service-asset-icon" src={"/images/service-"+id+"-cinematic.png"} width={size} height={size} alt="" aria-hidden="true" style={{width:size,height:size}}/>;const source="/images/service-remise-cinematic.png";return <img className="service-asset-icon" src={source} width={size} height={size} alt="" aria-hidden="true" style={{width:size,height:size}}/>;}
-const paths: Record<string,string> = {access:"/",register:"/inscription",hub:"/marches-publics",remise:"/remise",requests:"/demandes",facture:"/demandes?type=facture",livraison:"/demandes?type=livraison",echantillons:"/demandes?type=echantillons"};
+const navigation = [
+ ["remise", "Remise d’achat"],
+ ["imported", "Mobilier de bureaux importation haut de gamme"],
+ ["moroccan", "Mobilier de bureaux marocain"],
+ ["facture", "Demande de facture"],
+ ["livraison", "Demande de bon de livraison"],
+ ["echantillons", "Demande de bon de livraison des échantillons"],
+ ...Object.entries(extraServices),
+];
+const serviceImages: Record<string, string> = {
+ remise: "/images/service-remise-cinematic.png",
+ imported: "/images/service-imported.webp",
+ moroccan: "/images/service-moroccan.webp",
+};
+const serviceIcons = { caution: ShieldCheck, references: FileCheck2, reglementation: Scale, echanges: MessagesSquare, autres: BriefcaseBusiness };
+function ServiceIcon({id,size=40}:{id:string;size?:number}) {
+ if (isExtraService(id)) {
+  const Icon = serviceIcons[id];
+  return <Icon className="service-extra-icon" size={Math.round(size * .58)} strokeWidth={1.65} aria-hidden="true"/>;
+ }
+ const source = isDocumentKind(id) ? `/images/service-${id}-cinematic.png` : serviceImages[id];
+ return <img className="service-asset-icon" src={source} width={size} height={size} alt="" aria-hidden="true" style={{width:size,height:size}}/>;
+}
+const paths: Record<string,string> = {access:"/",register:"/inscription",hub:"/marches-publics",remise:"/remise",requests:"/demandes",facture:"/demandes?type=facture",livraison:"/demandes?type=livraison",echantillons:"/demandes?type=echantillons",imported:"/catalogue/bureau",moroccan:"/catalogue/maroc",...Object.fromEntries(Object.keys(extraServices).map(id=>[id,`/services/${id}`]))};
 async function api(action:string,data:Record<string,unknown>={}) {await initializeClientVisit();const r=await fetch("/api/tawzala",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,...data})});const result=await r.json() as ApiReply;if(!r.ok)throw Object.assign(new Error(result.error||"La demande n’a pas pu être enregistrée."),{status:r.status});return result;}
 function Brand({name=BRAND_NAME}:{name?:string}) {
  return <span className="brand"><img className="brand-logo" src="/images/bdg-logo.webp" width={44} height={44} alt=""/><span className="brand-word">{name}</span></span>;
@@ -78,7 +101,7 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
  const [paymentMethod,setPaymentMethod]=useState("");
  const authEpoch=useRef(0),submissionKey=useRef<string|null>(null);
  const calculation=useMemo(()=>{const value=Number(amount.replace(",","."));if(!amount.trim()||value===0)return {amount:0,rate:remiseRate,discount:0,net:0};try{return calculateRemise(value,remiseRate);}catch{return null;}},[amount,remiseRate]);
- function go(next:string,entry?:"signup"|"signin"){if(isDocumentKind(next))setDocumentKind(next);else if(next==="requests")setDocumentKind(null);setScreen(isDocumentKind(next)?"requests":next);setError("");setMenuOpen(false);if(next==="remise")submissionKey.current=null;if(entry)setAccountMode(entry);router.push(paths[next]+(next==="register"&&entry==="signin"?"?mode=connexion":""));window.scrollTo({top:0,behavior:"instant"});}
+ function go(next:string,entry?:"signup"|"signin"){if(next==="imported"||next==="moroccan"){setMenuOpen(false);router.push(paths[next]+"?depuis=services");return;}if(isDocumentKind(next))setDocumentKind(next);else if(next==="requests")setDocumentKind(null);setScreen(isDocumentKind(next)?"requests":next);setError("");setMenuOpen(false);if(next==="remise")submissionKey.current=null;if(entry)setAccountMode(entry);router.push(paths[next]+(next==="register"&&entry==="signin"?"?mode=connexion":""));window.scrollTo({top:0,behavior:"instant"});}
  useEffect(()=>{setDocumentKind(initialDocumentKind);},[initialDocumentKind]);
  useEffect(()=>{setScreen(initialScreen);setError("");window.scrollTo({top:0,behavior:"instant"});},[initialScreen]);
  useEffect(()=>{if(initialScreen==="register"){setAccountMode(initialAccountMode);setAccountPasswordVisible(false);}},[initialScreen,initialAccountMode]);
@@ -199,6 +222,12 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
  </main>:!ready||!buyer?<main className="page-width loading-page"><Skeleton className="h-12 w-72 mb-8"/><Skeleton className="h-72 w-full"/><p>Chargement de votre espace…</p>{error&&<p role="alert">{error}</p>}</main>:<><div className="session-strip"><span><ShieldCheck size={14}/>Espace acheteur public</span><span>Bienvenue, {buyer.name}</span></div>
  {screen==="hub"&&<main className="page-width hub-page compact-hub"><h1 className="sr-only">Services BDG</h1>
   <div className="service-tiles">{navigation.map(([id,label])=><button className={`service-tile service-tile-${id}`} key={id} onClick={()=>go(id)}><span className="tile-icon"><ServiceIcon id={id} size={100}/></span><span>{label}</span><ChevronRight size={16} className="tile-arrow"/></button>)}</div>
+  <button type="button" className="hub-contact" onClick={()=>go("autres")} aria-label="Contacter BDG"><Mail size={21}/></button>
+ </main>}
+ {isExtraService(screen)&&<main className="page-width document-page">
+  <button className="breadcrumb" onClick={()=>go("hub")}>Services<ChevronRight size={15}/><span>{extraServices[screen]}</span></button>
+  <div className="section-heading"><h1>{extraServices[screen]}</h1><div className="section-icon"><ServiceIcon id={screen} size={48}/></div></div>
+  <BuyerService service={screen} company={store.settings.company}/>
  </main>}
  {screen==="requests"&&<main className="page-width document-page"><button className="breadcrumb" onClick={()=>go("hub")}>Services<ChevronRight size={15}/><span>Demandes</span></button><div className="section-heading"><div><span className="eyebrow">VOS DOCUMENTS</span><h1>{documentKind?DOCUMENT_TYPES[documentKind]:"Mes demandes"}<span>.</span></h1><p>Demandez votre facture ou votre bon de livraison et suivez sa préparation.</p></div><div className="section-icon"><ServiceIcon id={documentKind||"facture"} size={48}/></div></div><DocumentRequests buyer={buyer} initialKind={documentKind} onSessionExpired={()=>{clearPrivateSpace();router.replace("/");}}/></main>}
  {screen==="remise"&&<main className="page-width calculator-page">
