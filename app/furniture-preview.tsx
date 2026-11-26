@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { Menu } from "lucide-react";
-import Link from "next/link";
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { furnitureCategories, type PreviewPhoto } from "@/lib/furniture-preview";
 
 function FurniturePhoto({ photo }: { photo: PreviewPhoto }) {
@@ -37,9 +36,7 @@ export default function FurniturePreview() {
       <SheetDescription className="sr-only">Choisissez une catégorie.</SheetDescription>
       <nav className="furniture-preview-categories" aria-label="Catégories de mobilier">
         {furnitureCategories.map(category => (
-          <SheetClose asChild key={category.id}>
-            <Link href={`/catalogue/${category.id}`}>{category.label}</Link>
-          </SheetClose>
+          <a key={category.id} href={`/catalogue/${category.id}`}>{category.label}</a>
         ))}
       </nav>
     </SheetContent>
