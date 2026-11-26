@@ -7,8 +7,7 @@ export const metadata: Metadata = {
   description: "Votre espace acheteur public pour calculer votre remise et demander vos documents.",
   robots: { index: false, follow: false },
   icons: {
-    icon: { url: "/images/tawzala-crown.png", type: "image/png" },
-    shortcut: "/images/tawzala-crown.png",
+    icon: { url: "/images/morocco-flag.svg", type: "image/svg+xml" },
   },
 };
 

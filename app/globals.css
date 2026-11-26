@@ -356,46 +356,10 @@
   .compact-hub .service-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-:root { --access-strip-height: clamp(54px, calc(30px + 2.88vw), 69px); }
-
-.access-header.access-header-emblem {
-  height: var(--access-strip-height);
-  padding: 0;
-  border: 0;
-  justify-content: center;
-  background: #092b22;
-  border-bottom-color: #d4b07938;
+:root {
+  --access-strip-height: clamp(36px, 4.6svh, 42px);
+  --bdg-flag-height: clamp(30px, 4.6svh, 42px);
 }
-
-.access-layout.access-emblem {
-  min-height: calc(100svh - var(--access-strip-height));
-  background:
-    linear-gradient(#08291e65, #061f19a6),
-    url("/images/morocco-emblem.svg") center top / auto min(87svh, 620px) no-repeat,
-    radial-gradient(ellipse at top, #21634d, #062b21 72%);
-}
-
-.access-emblem.access-minimal .access-form-panel {
-  flex: 1;
-  min-height: 235px;
-  padding-block: 36px 24px;
-  justify-content: center;
-}
-
-.access-emblem .access-card {
-  width: min(100%, 340px);
-  padding: 22px;
-  background: #092b23f5;
-  border: 1px solid #d4b07970;
-  border-radius: 20px;
-  box-shadow: 0 12px 32px #00181052;
-}
-
-.access-emblem .primary-button { color: #102d25; }
-
-.access-strip .brand { color: inherit; }
-.access-strip .brand-word { font-size: inherit; }
-.access-strip .brand-crown { width: 48px; height: auto; }
 
 .access-strip {
   position: relative;
@@ -408,7 +372,7 @@
   background: #08291feb;
   border-block: 1px solid #d4b07953;
   color: #f2d4a8;
-  font: 700 clamp(1.2rem, 2.4vw, 2rem)/1.2 Georgia, serif;
+  font: 700 clamp(1rem, 2vw, 1.45rem)/1.2 Georgia, serif;
 }
 
 .access-strip-track { display: flex; width: max-content; animation: access-strip-scroll 25s linear infinite; }
@@ -457,14 +421,11 @@
   .access-layout.access-emblem { background-size: auto, min(106vw, 540px) auto, auto; }
 }
 
-/* Access page masthead and glass panel. */
-:root {
-  --bdg-flag-height: clamp(38px, 4.5vw, 60px);
-  --bdg-masthead-height: 66px;
-}
-
+/* Access page flag and glass panel. */
 .access-header.access-header-emblem {
   height: auto;
+  padding: 0;
+  border: 0;
   gap: 0;
   flex-direction: column;
   position: relative;
@@ -485,37 +446,10 @@
     url("/images/morocco-flag.svg") 0 0 / auto 100% repeat-x;
 }
 
-.access-masthead {
-  display: flex;
-  align-items: center;
-  gap: clamp(10px, 2vw, 22px);
-  width: 100%;
-  min-height: var(--bdg-masthead-height);
-  padding: 8px clamp(14px, 2.6vw, 36px);
-  border-bottom: 2px solid #d4b779;
-  color: #e4c88c;
-  background: linear-gradient(100deg, #092a20, #104431);
-}
-
-.access-masthead .brand { color: inherit; gap: 7px; }
-.access-masthead .brand-word { font: 700 clamp(1.3rem, 2.5vw, 1.8rem)/1 Georgia, serif; }
-.access-masthead .brand-crown { width: 32px; height: auto; }
-
-.access-masthead-title {
-  display: grid;
-  gap: 2px;
-  padding-inline-start: clamp(10px, 2vw, 16px);
-  border-inline-start: 1px solid #d4b77960;
-  font-size: .875rem;
-}
-.access-masthead-title strong { text-transform: uppercase; }
-.access-masthead-title span { color: #e3e7d8; }
-.access-masthead-lock { flex-shrink: 0; margin-inline-start: auto; }
-
 .access-layout.access-emblem {
   position: relative;
   isolation: isolate;
-  min-height: calc(100svh - var(--bdg-flag-height) - var(--bdg-masthead-height));
+  min-height: calc(100svh - var(--bdg-flag-height) - var(--access-strip-height));
   background: radial-gradient(ellipse at 50% 46%, #326143, #0d3928 46%, #06281e 80%);
 }
 
@@ -529,7 +463,7 @@
 
 .access-layout.access-emblem::before {
   z-index: -1;
-  background: url("/images/morocco-emblem.svg") center / auto min(93%, 560px) no-repeat;
+  background: url("/images/morocco-emblem.svg") center / auto min(104%, 118vw, 740px) no-repeat;
   filter: sepia(.65) saturate(.9) brightness(1.12);
   opacity: .83;
 }
@@ -541,9 +475,18 @@
   opacity: .36;
 }
 
-.access-emblem.access-minimal .access-form-panel { min-height: 390px; padding-block: 26px; }
+.access-emblem.access-minimal .access-form-panel {
+  flex: 1;
+  min-height: 0;
+  padding: 12px 16px;
+  justify-content: center;
+}
+.access-emblem.access-minimal .access-form { gap: 8px; }
+.access-emblem .input-wrap input { padding-block: 8px; font-size: .9rem; }
+.access-emblem .form-error { margin: 0; padding: 8px 10px; }
 .access-emblem .access-card {
-  width: min(100%, 330px);
+  width: min(100%, 288px);
+  padding: 12px 16px;
   background: linear-gradient(145deg, #30513ba6, #0b3026b8);
   border-color: #dfc88b75;
   border-radius: 16px;
@@ -551,13 +494,14 @@
   box-shadow: 0 12px 36px #051e1780, inset 0 0 28px #d4b7791c;
 }
 
-.access-card-title { border-bottom: 1px solid #e1c58444; padding-bottom: 13px; margin-bottom: 13px; }
-.access-card-title img { margin-inline: auto; display: block; object-fit: contain; }
+.access-card-title { border-bottom: 1px solid #e1c58444; padding-bottom: 7px; margin-bottom: 7px; }
 .access-emblem .access-card-title h1 { color: #f1d79d; font-size: 1rem; text-transform: uppercase; margin: 5px 0 2px; }
-.access-card-title p { color: #f3e9d7; font-size: .875rem; margin: 0; }
 .access-form-caption { margin: 0; text-align: center; color: #fff; font-size: .875rem; }
 
 .access-emblem .primary-button {
+  min-height: 38px;
+  padding: 7px 12px;
+  margin: 0;
   background: linear-gradient(108deg, #bb812f, #f1cf78 52%, #c88d37);
   border-color: #efcf86;
   color: #221909;
@@ -565,19 +509,10 @@
 }
 
 .access-emblem .access-emblem-footer {
-  margin-top: 16px;
-  padding: 12px 0 0;
+  margin-top: 9px;
+  padding: 7px 0 0;
   border-top: 1px solid #e1c58444;
   gap: 4px 12px;
 }
 
 .access-emblem > .access-strip { border-block: 2px solid #d4b779; }
-.access-strip .brand { display: inline-flex; vertical-align: middle; gap: 6px; }
-.access-strip .brand-crown { width: 31px; }
-.access-strip-dot { margin-inline: .35em; }
-
-@media (max-width: 600px) {
-  .access-layout.access-emblem::before { background-size: min(110vw, 470px) auto; }
-  .access-emblem.access-minimal .access-form-panel { min-height: 365px; padding-inline: 16px; }
-  .access-masthead-title { font-size: .75rem; }
-}
