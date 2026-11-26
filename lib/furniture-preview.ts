@@ -8,7 +8,7 @@ function localPhoto(label: string, image: string, price: number): Photo {
 export const furnitureCategories: { id: string; label: string; photos: PreviewPhoto[] }[] = [
   {
     id: "bureau",
-    label: "Mobilier de bureau",
+    label: "Mobilier de bureaux importés",
     photos: [
       localPhoto("Bureau de direction", "office-20835", 5800),
       localPhoto("Table de conférence", "office-24784", 9200),
@@ -17,7 +17,7 @@ export const furnitureCategories: { id: string; label: string; photos: PreviewPh
   },
   {
     id: "maroc",
-    label: "Mobilier de bureau marocain",
+    label: "Mobilier de bureaux marocain",
     photos: [
       localPhoto("Bureau compact", "moroccan-28065", 1250),
       localPhoto("Bureau avec caisson", "moroccan-28110", 2450),
@@ -26,7 +26,7 @@ export const furnitureCategories: { id: string; label: string; photos: PreviewPh
   },
   {
     id: "chine",
-    label: "Mobilier de bureau de Chine",
+    label: "Mobilier de bureaux de Chine",
     photos: [
       {
         label: "Postes de travail séparés",
