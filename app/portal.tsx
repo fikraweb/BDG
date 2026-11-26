@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
-import { LockKeyhole, Eye, EyeOff, ShieldCheck, LogOut, Calculator, Check, Clock, CheckCircle2, ChevronRight, Building2, UserRound, Mail, Phone, Loader2, Menu, Download, BadgePercent } from "lucide-react";
+import { LockKeyhole, Eye, EyeOff, ShieldCheck, LogOut, Calculator, Check, Clock, CheckCircle2, ChevronRight, Building2, UserRound, Mail, Phone, Loader2, Menu, Download, BadgePercent, Pause, Play } from "lucide-react";
 import { initializeClientVisit, endClientVisit, finishClientPage, observeVisitNavigation, isInternalVisitExit, prepareAdminVisit, forgetClientContinuation } from "@/lib/client-visit";
 import { DOCUMENT_TYPES, isDocumentKind, type DocumentKind } from "@/lib/document-types";
 import DocumentRequests from "@/app/document-requests";
@@ -112,9 +112,10 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
    if(epoch===authEpoch.current)setError((e as Error).message);
   }finally{if(epoch===authEpoch.current)setBusy(false);}
  }
+ const [welcomePaused,setWelcomePaused]=useState(false);
  const access=screen==="access"||screen==="register";
 
- return <><TooltipProvider delayDuration={180}><Toaster position="top-center" theme="light"/><header className={`site-header${access?" access-header":""}${screen==="access"?" access-header-emblem":""}`}><button className="brand-link" onClick={()=>go(authenticated&&buyer?"hub":"access")} aria-label={brandName+" — Accueil"}><Brand name={brandName}/></button>{access?(screen==="register"?<span className="header-private" aria-label="Espace privé"><ShieldCheck size={17}/><span>Espace privé</span></span>:null):<><nav className="desktop-nav" aria-label="Navigation principale">{navigation.map(([id,label])=><Tooltip key={id}><TooltipTrigger asChild><button className={(screen==="requests"?documentKind:screen)===id?"active":""} aria-label={label} aria-current={(screen==="requests"?documentKind:screen)===id?"page":undefined} onClick={()=>go(id)}><ServiceIcon id={id}/></button></TooltipTrigger><TooltipContent side="bottom" sideOffset={10}>{label}</TooltipContent></Tooltip>)}</nav><div className="header-actions"><button className="user-name account-trigger" onClick={()=>setAccountOpen(true)} disabled={!buyer||!hasAccount} aria-label="Ouvrir mon compte"><UserRound size={16}/><span>{buyer?.name.split(" ")[0]}</span></button><button className="icon-button logout-desktop" aria-label="Se déconnecter" onClick={logout} disabled={busy}><LogOut size={19}/></button><button className="icon-button mobile-toggle" aria-label="Ouvrir le menu" onClick={()=>setMenuOpen(true)}><Menu size={23}/></button></div></>}</header>
+ return <><TooltipProvider delayDuration={180}><Toaster position="top-center" theme="light"/><header className={`site-header${access?" access-header":""}${screen==="access"?" access-header-emblem":""}`}>{screen==="access"?<img className="access-flag" src="/images/morocco-flag.svg" width={60} height={40} alt="Drapeau du Maroc"/>:<button className="brand-link" onClick={()=>go(authenticated&&buyer?"hub":"access")} aria-label={brandName+" — Accueil"}><Brand name={brandName}/></button>}{access?(screen==="register"?<span className="header-private" aria-label="Espace privé"><ShieldCheck size={17}/><span>Espace privé</span></span>:null):<><nav className="desktop-nav" aria-label="Navigation principale">{navigation.map(([id,label])=><Tooltip key={id}><TooltipTrigger asChild><button className={(screen==="requests"?documentKind:screen)===id?"active":""} aria-label={label} aria-current={(screen==="requests"?documentKind:screen)===id?"page":undefined} onClick={()=>go(id)}><ServiceIcon id={id}/></button></TooltipTrigger><TooltipContent side="bottom" sideOffset={10}>{label}</TooltipContent></Tooltip>)}</nav><div className="header-actions"><button className="user-name account-trigger" onClick={()=>setAccountOpen(true)} disabled={!buyer||!hasAccount} aria-label="Ouvrir mon compte"><UserRound size={16}/><span>{buyer?.name.split(" ")[0]}</span></button><button className="icon-button logout-desktop" aria-label="Se déconnecter" onClick={logout} disabled={busy}><LogOut size={19}/></button><button className="icon-button mobile-toggle" aria-label="Ouvrir le menu" onClick={()=>setMenuOpen(true)}><Menu size={23}/></button></div></>}</header>
  {access?<main className={`access-layout access-blue${screen==="access"?" access-minimal access-emblem":""}`}>
   <section className="access-form-panel"><div className="access-card">
    {screen==="register"&&<>
@@ -167,15 +168,20 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
  </form>
 </div>}</div>{screen==="register"&&<div className="access-copyright">© {new Date().getFullYear()} {brandName} <span>Portail des acheteurs publics</span></div>}</section>
  {screen==="access"&&<>
-  <div className="access-welcome">
-   <span aria-hidden="true"><i>Bienvenue</i> acheteur public</span>
-   <span><i>Bienvenue</i> acheteur public</span>
-   <span aria-hidden="true"><i>Bienvenue</i> acheteur public</span>
-  </div>
   <footer className="access-emblem-footer">
    <span>© {new Date().getFullYear()} {brandName}</span>
    <a href="https://commons.wikimedia.org/wiki/File:Coat_of_arms_of_Morocco_(simple).svg" target="_blank" rel="noreferrer">Crédits de l’emblème</a>
   </footer>
+  <div className="access-bdg-strip"><Brand name={brandName}/></div>
+  <div className="access-welcome" data-paused={welcomePaused}>
+   <span className="sr-only">Bienvenue acheteur public</span>
+   <div className="access-welcome-track" aria-hidden="true">
+    {[0, 1].map(group=><div className="access-welcome-group" key={group}>
+     {[0, 1, 2].map(item=><span key={item}><i>Bienvenue</i> acheteur public</span>)}
+    </div>)}
+   </div>
+   <button type="button" className="access-welcome-pause" onClick={()=>setWelcomePaused(!welcomePaused)} aria-label={welcomePaused?"Reprendre le défilement":"Mettre le défilement en pause"}>{welcomePaused?<Play size={17}/>:<Pause size={17}/>}</button>
+  </div>
  </>}
  </main>:!ready||!buyer?<main className="page-width loading-page"><Skeleton className="h-12 w-72 mb-8"/><Skeleton className="h-72 w-full"/><p>Chargement de votre espace…</p>{error&&<p role="alert">{error}</p>}</main>:<><div className="session-strip"><span><ShieldCheck size={14}/>Espace acheteur public</span><span>Bienvenue, {buyer.name}</span></div>
  {screen==="hub"&&<main className="page-width hub-page compact-hub"><h1 className="sr-only">Services BDG</h1>
