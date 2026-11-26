@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { flushSync } from "react-dom";
-import { Eye, EyeOff, Loader2, LockKeyhole, Mail } from "lucide-react";
+import { Eye, EyeOff, Loader2, LockKeyhole } from "lucide-react";
 import Admin from "@/app/admin/admin";
 import { enterAdminVisit, finishClientPage, endClientVisit, isReload, isInternalVisitExit, prepareBuyerReturn } from "@/lib/client-visit";
 
@@ -76,8 +76,8 @@ export default function AdminEntry() {
   async function signIn(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setError("");
     try {
-      const values = Object.fromEntries(new FormData(event.currentTarget));
-      const response = await fetch("/api/admin/auth", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "login", ...values }) });
+      const password = new FormData(event.currentTarget).get("password");
+      const response = await fetch("/api/admin/auth", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "login", password }) });
       const data = await response.json() as LoginReply;
       if (!response.ok) throw new Error(data.error || "Connexion impossible.");
       if (!/^[a-f0-9]{64}$/.test(data.sessionToken)) throw new Error("Connexion impossible. Réessayez.");
@@ -92,5 +92,5 @@ export default function AdminEntry() {
   }
 
   if (session) return <><Admin email={session.email} token={session.token} onSessionChange={value => remember(value)} onSessionExpired={() => { remember(null); setError("Votre session a expiré. Connectez-vous à nouveau."); }}/><button className="admin-signout" onClick={signOut}>Déconnexion admin</button></>;
-  return <main className="admin-access bdg-themed"><div className="admin-login-card"><img className="brand-logo" src="/images/bdg-logo.webp" alt="BDG" width={44} height={44}/><h1>Espace admin</h1><p>Saisissez votre email et votre mot de passe pour accéder à l’administration.</p><form className="access-form" onSubmit={signIn}><label className="field">Email administrateur<div className="input-wrap"><span className="input-icon"><Mail size={18} aria-hidden="true"/></span><input name="email" type="email" required maxLength={254} autoComplete="username"/></div></label><label className="field">Mot de passe<div className="input-wrap"><span className="input-icon"><LockKeyhole size={18} aria-hidden="true"/></span><input name="password" type={visible ? "text" : "password"} required  maxLength={128} autoComplete="current-password"/><button type="button" className="show-password" onClick={() => setVisible(!visible)} aria-label={visible ? "Masquer le mot de passe" : "Afficher le mot de passe"}>{visible ? <EyeOff size={18}/> : <Eye size={18}/>}</button></div></label>{error && <p role="alert" className="form-error">{error}</p>}<button className="primary-button" disabled={busy}>{busy ? <Loader2 className="spin" size={18}/> : <LockKeyhole size={18}/>} Se connecter</button></form><a className="admin-return" href="/">Retour au site</a></div></main>;
+  return <main className="admin-access bdg-themed"><div className="admin-login-card"><img className="brand-logo" src="/images/bdg-logo.webp" alt="BDG" width={44} height={44}/><h1>Espace admin</h1><p>Saisissez votre mot de passe administrateur.</p><form className="access-form" onSubmit={signIn}><label className="field">Mot de passe<div className="input-wrap"><span className="input-icon"><LockKeyhole size={18} aria-hidden="true"/></span><input name="password" type={visible ? "text" : "password"} required  maxLength={128} autoComplete="current-password"/><button type="button" className="show-password" onClick={() => setVisible(!visible)} aria-label={visible ? "Masquer le mot de passe" : "Afficher le mot de passe"}>{visible ? <EyeOff size={18}/> : <Eye size={18}/>}</button></div></label>{error && <p role="alert" className="form-error">{error}</p>}<button className="primary-button" disabled={busy}>{busy ? <Loader2 className="spin" size={18}/> : <LockKeyhole size={18}/>} Se connecter</button></form><a className="admin-return" href="/">Retour au site</a></div></main>;
 }
