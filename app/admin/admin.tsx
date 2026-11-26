@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import AdminOverview from "@/app/admin/overview";
+import AccessBannersPanel from "@/app/admin/access-banners-panel";
 import SecurityPanel from "@/app/admin/security-panel";
 import type {SecuritySettings} from "@/lib/security-types";
 import ServiceRequestsPanel from "@/app/admin/service-requests-panel";
@@ -23,6 +24,7 @@ const adminSections = [
   { id: "payouts", label: "Versements", icon: Coins },
   { id: "remise", label: "Remise", icon: BadgePercent },
   { id: "company", label: "Entreprise", icon: Building2 },
+  { id: "access-banners", label: "Bandeaux", icon: Globe2 },
   { id: "security", label: "Accès", icon: ShieldCheck },
 ] as const;
 
@@ -95,6 +97,7 @@ export default function Admin({ token,onSessionChange,onSessionExpired,onSignOut
       <fieldset disabled={isLocked} className="admin-fields"><label className="field admin-full">Adresse<textarea required maxLength={400} rows={2} value={company.address} onChange={e => setCompany({ ...company, address: e.target.value })}/></label>{companyFields.map(field => <label className={`field${field.key === "name" ? " admin-full" : ""}`} key={field.key}>{field.label}<input type={field.type || "text"} maxLength={field.max} required value={company[field.key]} onChange={e => setCompany({ ...company, [field.key]: e.target.value })}/></label>)}</fieldset>
       <div className="admin-save"><button className="primary-button" disabled={isLocked}>{busy ? <Loader2 className="spin" size={18}/> : <Save size={18}/>}Enregistrer les coordonnées</button></div></form></section></TabsContent>
     <TabsContent className="admin-tab-panel" value="remise"><section className="admin-panel admin-remise-panel"><form onSubmit={e => { e.preventDefault(); void save("settings-save", { company: store.settings.company, remiseRate: sampleRate, revision: store.settings.revision }); }}><div className="admin-panel-heading"><h2>Pourcentage de remise</h2><p>Le taux s’applique aux demandes de remise.</p></div><label className="field admin-rate-field">Remise (%)<input inputMode="decimal" type="number" min={0} max={100} step="0.01" required value={rate} onChange={e => setRate(e.target.value)} disabled={isLocked}/></label><p className="admin-help">Les clients voient le taux et ne peuvent pas le modifier. Les anciennes demandes gardent leur calcul d’origine.</p><button className="primary-button" disabled={isLocked || !example}>{busy ? <Loader2 className="spin" size={18}/> : <Save size={18}/>}Enregistrer le taux</button></form><aside className="admin-rate-example"><span>REMISE D’ACHAT SUR 1 000 MAD</span><strong>{example ? money(example.discount) : "—"}</strong><dl><div><dt>Avant remise</dt><dd>{money(1000)}</dd></div><div><dt>Remise de {example?.rate ?? "—"} %</dt><dd>{example ? money(example.discount) : "—"}</dd></div></dl><small>Taux enregistré : {store.settings.remiseRate} %</small></aside></section></TabsContent>
+    <TabsContent className="admin-tab-panel" value="access-banners"><AccessBannersPanel key={store.settings.revision} settings={store.settings} locked={isLocked} onSave={save}/></TabsContent>
     <TabsContent className="admin-tab-panel" value="security">{security&&<SecurityPanel settings={security} locked={isLocked} onSave={save}/>}</TabsContent>
     <TabsContent className="admin-tab-panel" value="service-requests"><ServiceRequestsPanel token={token}/></TabsContent>
     <TabsContent className="admin-tab-panel" value="documents"><DocumentsPanel token={token} onSessionExpired={onSessionExpired} company={store.settings.company}/></TabsContent>

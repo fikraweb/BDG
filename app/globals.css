@@ -376,8 +376,8 @@
 }
 
 .access-strip-track { display: flex; width: max-content; animation: access-strip-scroll 25s linear infinite; }
-.access-strip-group { display: grid; grid-template-columns: repeat(3, 1fr); width: max(100vw, 64rem); align-items: center; text-align: center; }
-.access-strip-item { white-space: nowrap; }
+.access-strip-group { display: grid; grid-template-columns: repeat(3, minmax(max-content, 1fr)); min-width: max(100vw, 64rem); align-items: center; text-align: center; }
+.access-strip-item { white-space: nowrap; padding-inline: 16px; }
 .access-strip[data-paused="true"] .access-strip-track { animation-play-state: paused; }
 
 @keyframes access-strip-scroll { to { transform: translateX(-50%); } }
@@ -399,7 +399,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .access-strip-track { animation: none; width: 100%; }
-  .access-strip-group { grid-template-columns: 1fr; width: 100%; }
+  .access-strip-group { grid-template-columns: minmax(0, 1fr); min-width: 0; width: 100%; }
   .access-strip-group + .access-strip-group,
   .access-strip-item:not(:first-child),
   .access-strip-pause { display: none; }
@@ -438,12 +438,27 @@
   background: #a91f29;
 }
 
-.access-flag-strip .access-strip-group {
-  width: round(up, 100vw, calc(var(--bdg-flag-height) * 1.5));
+.access-flag-group, .access-flag-cycle { display: flex; }
+.access-flag {
+  position: relative;
+  display: block;
+  width: max(calc(var(--bdg-flag-height) * 1.5), 2.5vw);
   height: var(--bdg-flag-height);
-  background:
-    repeating-linear-gradient(112deg, #42071150 0%, #ffffff19 46%, #42071142 100%) 0 0 / calc(var(--bdg-flag-height) * 1.5) 100%,
-    url("/images/morocco-flag.svg") 0 0 / auto 100% repeat-x;
+  flex: none;
+}
+.access-flag svg { display: block; width: 100%; height: 100%; }
+.access-flag::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(112deg, #42071150, #ffffff19 46%, #42071142);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .access-flag-strip { overflow-x: auto; scrollbar-width: none; }
+  .access-flag-strip .access-strip-track { width: max-content; }
+  .access-flag-group + .access-flag-group, .access-flag-cycle:not(:first-child) { display: none; }
+  .access-strip-item { white-space: normal; overflow-wrap: anywhere; }
 }
 
 :root {

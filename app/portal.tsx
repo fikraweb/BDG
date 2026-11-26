@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { flagName, type FlagCode } from "@/lib/access-banners";
 import BuyerService from "@/app/buyer-service";
 import { extraServices, isExtraService } from "@/lib/buyer-services";
 import RemiseTicker from "@/app/remise-ticker";
@@ -58,8 +59,8 @@ async function api(action:string,data:Record<string,unknown>={}) {await initiali
 function Brand({name=BRAND_NAME}:{name?:string}) {
  return <span className="brand"><img className="brand-logo" src="/images/bdg-logo.webp" width={32} height={32} alt=""/><span className="brand-word">{name}</span></span>;
 }
-function AccessStrip({label, paused, children, onToggle, flags=false}:{label:string;paused:boolean;children?:React.ReactNode;onToggle?:()=>void;flags?:boolean}) {
- return <div className={flags?"access-strip access-flag-strip":"access-strip"} data-paused={paused}>
+function AccessStrip({label, paused, children, onToggle}:{label:string;paused:boolean;children?:React.ReactNode;onToggle?:()=>void}) {
+ return <div className="access-strip" data-paused={paused}>
   <span className="sr-only">{label}</span>
   <div className="access-strip-track" aria-hidden="true">
    {[0, 1].map(group=><div className="access-strip-group" key={group}>
@@ -67,6 +68,19 @@ function AccessStrip({label, paused, children, onToggle, flags=false}:{label:str
    </div>)}
   </div>
   {onToggle&&<button type="button" className="access-strip-pause" onClick={onToggle} aria-label={paused?"Reprendre le défilement des bandeaux":"Mettre les bandeaux en pause"}>{paused?<Play size={17}/>:<Pause size={17}/>}</button>}
+ </div>;
+}
+function FlagStrip({ flags, paused }: { flags: FlagCode[]; paused: boolean }) {
+ const repeats = Math.ceil(40 / flags.length);
+ return <div className="access-strip access-flag-strip" data-paused={paused}>
+  <span className="sr-only">Drapeaux : {flags.map(flagName).join(", ")}</span>
+  <div className="access-strip-track" aria-hidden="true">
+   {[0, 1].map(group => <div className="access-flag-group" key={group}>
+    {Array.from({ length: repeats }, (_, repeat) => <span className="access-flag-cycle" key={repeat}>
+     {flags.map(code => <span className="access-flag" key={code}><svg focusable="false"><use href={`/images/access-flags.svg#${code}`}/></svg></span>)}
+    </span>)}
+   </div>)}
+  </div>
  </div>;
 }
 function Field({label,icon,children}:{label:string;icon?:React.ReactNode;children:React.ReactNode}) {return <label className="field"><span>{label}</span><span className="input-wrap">{icon&&<span className="input-icon">{icon}</span>}{children}</span></label>;}
@@ -153,11 +167,12 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
   }finally{if(epoch===authEpoch.current)setBusy(false);}
  }
  const [welcomePaused,setWelcomePaused]=useState(false);
+ const { brandText, welcomeText, flags } = store.settings.accessBanners;
  const access=screen==="access"||screen==="register";
 
  return <><TooltipProvider delayDuration={180}><Toaster position="top-center" theme="light"/><header className={`site-header${access?" access-header access-header-emblem":" buyer-header"}`}>{access?<>
-  <AccessStrip label="Drapeau du Maroc" paused={welcomePaused} flags/>
-  <AccessStrip label={brandName} paused={welcomePaused}><Brand name={brandName}/></AccessStrip>
+  <FlagStrip flags={flags} paused={welcomePaused}/>
+  <AccessStrip label={brandText} paused={welcomePaused}><Brand name={brandText}/></AccessStrip>
  </>:<>
   <button className="brand-link" onClick={()=>go(authenticated&&buyer?"hub":"access")} aria-label={brandName+" — Accueil"}><Brand name={brandName}/></button>
   <nav className="desktop-nav" aria-label="Navigation principale">{navigation.map(([id,label])=><Tooltip key={id}><TooltipTrigger asChild><button className={(screen==="requests"?documentKind:screen)===id?"active":""} aria-label={label} aria-current={(screen==="requests"?documentKind:screen)===id?"page":undefined} onClick={event=>{
@@ -223,8 +238,8 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
   <button type="button" className="text-button" onClick={leaveAccess} disabled={busy}>Revenir à l’accès</button>
  </form>
 </div>}</div>{screen==="register"&&<div className="access-copyright">© {new Date().getFullYear()} {brandName} <span>Portail des acheteurs publics</span></div>}</section>
-  <AccessStrip label="Bienvenue" paused={welcomePaused} onToggle={()=>setWelcomePaused(paused=>!paused)}>
-   Bienvenue
+  <AccessStrip label={welcomeText} paused={welcomePaused} onToggle={()=>setWelcomePaused(paused=>!paused)}>
+   {welcomeText}
   </AccessStrip>
   {screen==="access"&&<footer className="access-emblem-footer">
    <span>© {new Date().getFullYear()} {brandName}</span>

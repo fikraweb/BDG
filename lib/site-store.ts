@@ -1,3 +1,4 @@
+import { BANNER_TEXT_LIMIT, DEFAULT_ACCESS_BANNERS, FLAG_CODES, isFlagCode } from "@/lib/access-banners";
 import { REMISE_RATE } from "@/lib/catalog";
 import type { SiteSettings } from "@/lib/site-types";
 import { COMPANY, type Company } from "@/lib/company";
@@ -11,7 +12,7 @@ export async function readSettings(): Promise<SiteSettings> {
     row = await db().prepare("SELECT value,revision FROM site_settings WHERE id='main'").first<SettingsRow>();
   }
   if (!row) throw new Error("Site settings unavailable");
-  return { ...JSON.parse(row.value), revision: row.revision };
+  return { accessBanners: DEFAULT_ACCESS_BANNERS, ...JSON.parse(row.value), revision: row.revision };
 }
 
 function cleanText(value: unknown, label: string, max: number) {
@@ -24,7 +25,7 @@ function revision(value: unknown) {
   return Number(value);
 }
 export async function saveSettings(body: Record<string, unknown>) {
-  await readSettings();
+  const settings = await readSettings();
   if (!body.company || typeof body.company !== "object" || Array.isArray(body.company)) throw new ApiError("Informations de société invalides.");
   const input = body.company as Record<string, unknown>;
   const company: Company = {
@@ -35,6 +36,19 @@ export async function saveSettings(body: Record<string, unknown>) {
   };
   const rate = body.remiseRate;
   if (typeof rate !== "number" || !Number.isFinite(rate) || rate < 0 || rate > 100 || Math.abs(rate * 100 - Math.round(rate * 100)) > 1e-8) throw new ApiError("La remise doit être comprise entre 0 et 100 %, avec deux décimales au maximum.");
-  const result = await db().prepare("UPDATE site_settings SET value=?,revision=revision+1,updated_at=? WHERE id='main' AND revision=?").bind(JSON.stringify({ company, remiseRate: rate }), Date.now(), revision(body.revision)).run();
+  await updateSettings({ ...settings, company, remiseRate: rate }, revision(body.revision));
+}
+
+export async function saveAccessBanners(body: Record<string, unknown>) {
+  const settings = await readSettings();
+  const flags = body.flags;
+  if (!Array.isArray(flags) || flags.length < 1 || flags.length > FLAG_CODES.length || !flags.every(isFlagCode) || new Set(flags).size !== flags.length) throw new ApiError("Sélectionnez au moins un drapeau, sans doublon.");
+  const accessBanners = { brandText: cleanText(body.brandText, "Le texte du bandeau supérieur", BANNER_TEXT_LIMIT), welcomeText: cleanText(body.welcomeText, "Le texte du bandeau inférieur", BANNER_TEXT_LIMIT), flags };
+  await updateSettings({ ...settings, accessBanners }, revision(body.revision));
+}
+
+async function updateSettings({ revision: storedRevision, ...settings }: SiteSettings, expectedRevision: number) {
+  if (storedRevision !== expectedRevision) throw new ApiError("Les paramètres ont changé dans une autre fenêtre. Actualisez avant d’enregistrer.", 409);
+  const result = await db().prepare("UPDATE site_settings SET value=?,revision=revision+1,updated_at=? WHERE id='main' AND revision=?").bind(JSON.stringify(settings), Date.now(), expectedRevision).run();
   if (!result.meta.changes) throw new ApiError("Les paramètres ont changé dans une autre fenêtre. Actualisez avant d’enregistrer.", 409);
 }

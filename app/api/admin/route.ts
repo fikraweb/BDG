@@ -2,7 +2,7 @@ import { adminFailure, checkAdminOrigin, limitedBody, requireAdmin } from "@/lib
 import { readPayoutRequests, sendPayoutCode } from "@/lib/payouts";
 import { publicSecurity,saveAdminCredentials,saveGatePassword } from "@/lib/security";
 import { ApiError } from "@/lib/server";
-import { readSettings, saveSettings } from "@/lib/site-store";
+import { readSettings, saveSettings, saveAccessBanners } from "@/lib/site-store";
 
 export const dynamic = "force-dynamic";
 const json = (value: unknown,cookie?:string) => Response.json(value, { headers: { "Cache-Control": "no-store",...(cookie?{"Set-Cookie":cookie}:{}) } });
@@ -21,6 +21,7 @@ export async function POST(request: Request) {
     else if(body.action==="admin-credentials-save")credentialChange=await saveAdminCredentials(body,request);
     else if(body.action==="payout-send")payoutDelivery=await sendPayoutCode(body);
     else if (body.action === "settings-save") await saveSettings(body);
+    else if (body.action === "access-banners-save") await saveAccessBanners(body);
     else throw new ApiError("Action inconnue.");
     return json({settings:await readSettings(), products:[],security:await publicSecurity(),payoutRequests:await readPayoutRequests(),...(payoutDelivery?{payoutDelivery}:{}),...(credentialChange?{adminEmail:credentialChange.email,sessionToken:credentialChange.sessionToken}:{})},credentialChange?credentialChange.cookie:undefined);
   } catch (error) { return adminFailure(error); }

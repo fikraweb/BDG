@@ -515,3 +515,9 @@ body:has(.admin-dashboard) .document-editor-dialog .document-form-grid :is(input
   [data-slot="sheet-content"].buyer-mobile-menu { animation: none; }
   .buyer-mobile-menu-row { transition: none; }
 }
+
+.admin-flag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.admin-flag-list li { display: flex; gap: 8px; align-items: center; padding: 4px 8px; border: 1px solid var(--admin-line); border-radius: 8px; }
+.admin-flag-list svg { flex: none; }
+.admin-flag-list button { min-height: 36px; padding-inline: 4px; text-decoration: underline; }
+.admin-flag-list button:disabled { opacity: .55; }
