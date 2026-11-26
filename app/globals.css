@@ -693,13 +693,37 @@
 }
 
 
-.site-header.hub-header {
-  background: #fff;
-  border-bottom-color: #e4eaf0;
+.site-header.buyer-header {
+  color: #fff3d8;
+  background: linear-gradient(115deg, #e5b96a59, #d1a04b28), #0a2a21d4;
+  border-bottom-color: #e3b97482;
+  backdrop-filter: blur(14px);
 }
-.hub-header .desktop-nav button:is(:hover, :focus-visible, .active) {
-  background: #eef4f2;
-  border-color: #d9e7e1;
+.buyer-header :is(.brand, .icon-button, .account-trigger) { color: inherit; }
+.buyer-header :is(.desktop-nav button, .header-actions button):is(:hover, :focus-visible, .active) {
+  background: #f5d48e28;
+  border-color: #e3b97482;
+}
+.buyer-header .brand-link { perspective: 220px; flex-shrink: 0; }
+.buyer-header .brand { gap: 8px; }
+.buyer-header .brand-word { font-size: 1rem; }
+.buyer-header .brand-logo {
+  filter: drop-shadow(0 3px 4px #0007);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .buyer-header .brand-logo {
+    animation: bdg-logo-reveal 850ms cubic-bezier(.22, .75, .25, 1) backwards;
+    transition: transform 330ms ease, filter 330ms ease;
+  }
+  .buyer-header .brand-link:is(:hover, :focus-visible) .brand-logo {
+    transform: translateY(-2px) rotateY(18deg) rotateZ(-5deg);
+    filter: drop-shadow(0 4px 6px #eac37380);
+  }
+}
+@keyframes bdg-logo-reveal {
+  from { transform: rotateY(-55deg) translateY(3px) scale(.88); opacity: .55; }
+  65% { transform: rotateY(14deg) translateY(-2px) scale(1.08); opacity: 1; }
+  to { transform: none; opacity: 1; }
 }
 .compact-hub .service-tile {
   color: #fff5de;
@@ -718,7 +742,7 @@
   background: linear-gradient(145deg, #eac37355, #bd873838);
 }
 .compact-hub .service-tile:focus-visible { outline: 2px solid #f5d48e; outline-offset: 3px; }
-.hub-header button:focus-visible { outline: 2px solid #377258; outline-offset: 2px; }
+.buyer-header button:focus-visible { outline: 2px solid #f5d48e; outline-offset: 2px; }
 .compact-hub .service-tile .tile-icon {
   background: radial-gradient(ellipse at 50% 38%, #fbfdfc, #e6eef8 82%);
 }
@@ -732,9 +756,6 @@
   background: radial-gradient(ellipse at 50% 38%, #f9fffd, #dbeee9 82%);
 }
 .site-header .header-actions { margin-inline-start: auto; }
-.site-header .header-actions .brand-link { margin-inline-start: 6px; }
-.site-header .header-actions .brand { gap: 7px; white-space: nowrap; }
-.site-header .header-actions .brand-word { font-size: 1rem; }
 
 .hub-contact {
   position: fixed;

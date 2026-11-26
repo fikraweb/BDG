@@ -154,15 +154,17 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
  const [welcomePaused,setWelcomePaused]=useState(false);
  const access=screen==="access"||screen==="register";
 
- return <><TooltipProvider delayDuration={180}><Toaster position="top-center" theme="light"/><header className={`site-header${access?" access-header access-header-emblem":screen==="hub"?" hub-header":""}`}>{access?<>
+ return <><TooltipProvider delayDuration={180}><Toaster position="top-center" theme="light"/><header className={`site-header${access?" access-header access-header-emblem":" buyer-header"}`}>{access?<>
   <AccessStrip label="Drapeau du Maroc" paused={welcomePaused} flags/>
   <AccessStrip label={brandName} paused={welcomePaused}><Brand name={brandName}/></AccessStrip>
- </>:<><nav className="desktop-nav" aria-label="Navigation principale">{navigation.map(([id,label])=><Tooltip key={id}><TooltipTrigger asChild><button className={(screen==="requests"?documentKind:screen)===id?"active":""} aria-label={label} aria-current={(screen==="requests"?documentKind:screen)===id?"page":undefined} onClick={event=>{
+ </>:<>
+  <button className="brand-link" onClick={()=>go(authenticated&&buyer?"hub":"access")} aria-label={brandName+" — Accueil"}><Brand name={brandName}/></button>
+  <nav className="desktop-nav" aria-label="Navigation principale">{navigation.map(([id,label])=><Tooltip key={id}><TooltipTrigger asChild><button className={(screen==="requests"?documentKind:screen)===id?"active":""} aria-label={label} aria-current={(screen==="requests"?documentKind:screen)===id?"page":undefined} onClick={event=>{
    if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
     event.currentTarget.animate?.([{transform:"scale(.9)"},{transform:"translateY(-3px) scale(1.1)"},{transform:"none"}],{duration:260,easing:"ease-out"});
    }
    go(id);
-  }}><ServiceIcon id={id}/></button></TooltipTrigger><TooltipContent side="bottom" sideOffset={10}>{label}</TooltipContent></Tooltip>)}</nav><div className="header-actions"><button className="user-name account-trigger" onClick={()=>setAccountOpen(true)} disabled={!buyer||!hasAccount} aria-label="Ouvrir mon compte"><UserRound size={16}/><span>{buyer?.name.split(" ")[0]}</span></button><button className="icon-button logout-desktop" aria-label="Se déconnecter" onClick={logout} disabled={busy}><LogOut size={19}/></button><button className="icon-button mobile-toggle" aria-label="Ouvrir le menu" onClick={()=>setMenuOpen(true)}><Menu size={23}/></button><button className="brand-link" onClick={()=>go(authenticated&&buyer?"hub":"access")} aria-label={brandName+" — Accueil"}><Brand name={brandName}/></button></div></>}</header>
+  }}><ServiceIcon id={id}/></button></TooltipTrigger><TooltipContent side="bottom" sideOffset={10}>{label}</TooltipContent></Tooltip>)}</nav><div className="header-actions"><button className="user-name account-trigger" onClick={()=>setAccountOpen(true)} disabled={!buyer||!hasAccount} aria-label="Ouvrir mon compte"><UserRound size={16}/><span>{buyer?.name.split(" ")[0]}</span></button><button className="icon-button logout-desktop" aria-label="Se déconnecter" onClick={logout} disabled={busy}><LogOut size={19}/></button><button className="icon-button mobile-toggle" aria-label="Ouvrir le menu" onClick={()=>setMenuOpen(true)}><Menu size={23}/></button></div></>}</header>
  {access?<main className={`access-layout access-blue access-emblem ${screen==="access"?"access-minimal":`access-registration access-registration-${accountMode}`}`}>
   {screen==="access"&&<FurniturePreview/>}
   <section className="access-form-panel"><div className="access-card">
@@ -228,7 +230,7 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
    <a href="https://commons.wikimedia.org/wiki/File:Coat_of_arms_of_Morocco_(simple).svg" target="_blank" rel="noreferrer">Crédits de l’emblème</a>
   </footer>}
 
- </main>:!ready||!buyer?<main className="page-width loading-page"><Skeleton className="h-12 w-72 mb-8"/><Skeleton className="h-72 w-full"/><p>Chargement de votre espace…</p>{error&&<p role="alert">{error}</p>}</main>:<><div className="session-strip"><span><ShieldCheck size={14}/>Espace acheteur public</span><span>Bienvenue, {buyer.name}</span></div>
+ </main>:!ready||!buyer?<main className="page-width loading-page"><Skeleton className="h-12 w-72 mb-8"/><Skeleton className="h-72 w-full"/><p>Chargement de votre espace…</p>{error&&<p role="alert">{error}</p>}</main>:<>
  {screen==="hub"&&<div className="hub-theme"><main className="page-width hub-page compact-hub"><h1 className="sr-only">Services BDG</h1>
   <RemiseTicker rate={remiseRate}/>
   <div className="service-tiles">{navigation.map(([id,label])=><button className={`service-tile service-tile-${id}`} key={id} onClick={()=>go(id)}><span className="tile-icon"><ServiceIcon id={id} size={100}/></span><span>{label}</span><ChevronRight size={16} className="tile-arrow"/></button>)}</div>
