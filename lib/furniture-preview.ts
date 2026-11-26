@@ -8,7 +8,7 @@ function localPhoto(label: string, image: string, price: number): Photo {
 export const furnitureCategories: { id: string; label: string; photos: PreviewPhoto[] }[] = [
   {
     id: "bureau",
-    label: "Mobilier de bureaux importés",
+    label: "Mobilier de bureaux importation",
     photos: [
       localPhoto("Bureau de direction", "office-20835", 5800),
       localPhoto("Table de conférence", "office-24784", 9200),
