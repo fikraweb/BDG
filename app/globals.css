@@ -476,6 +476,7 @@
 }
 
 .access-emblem.access-minimal .access-form-panel {
+  order: 0;
   flex: 1;
   min-height: 0;
   padding: 12px 16px;
@@ -516,3 +517,9 @@
 }
 
 .access-emblem > .access-strip { border-block: 2px solid #d4b779; }
+
+@media (max-width: 760px) {
+  .access-layout.access-emblem {
+    min-height: calc(100dvh - var(--bdg-flag-height) - var(--access-strip-height));
+  }
+}
