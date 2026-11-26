@@ -32,7 +32,7 @@ export function newDocumentDraft(id: string, kind: DocumentKind, contact: Docume
   const year = new Date().getUTCFullYear();
   return { number: formatDocumentReference(1, year), date: new Date().toISOString().slice(0, 10), place: "", bank: "BANQUE CENTRALE POPULAIRE AGENCE AL BASATINE BOUZNIKA", rib: company.rib, taxRate: 20, items: isStatementDocument(kind) ? [] : [{ designation: "", unit: "U", quantity: 1, unitPrice: 0 }], note: "", contact: { ...contact, note: "" } };
 }
-export function requestStatus(request: DocumentRequest) { return request.hasPdf ? "Document disponible" : request.status === "new" ? "Demande enregistrée" : "En cours de traitement"; }
+export function requestStatus(request: Pick<DocumentRequest, "hasPdf" | "status">) { return request.hasPdf ? "Document disponible" : request.status === "new" ? "Demande enregistrée" : "En cours de traitement"; }
 
 export function amountInWords(value: number) {
   const ones = ["zéro", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix", "onze", "douze", "treize", "quatorze", "quinze", "seize"];

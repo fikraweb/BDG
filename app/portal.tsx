@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import BuyerService from "@/app/buyer-service";
 import { extraServices, isExtraService } from "@/lib/buyer-services";
 import RemiseTicker from "@/app/remise-ticker";
+import BuyerHubInsights from "@/app/buyer-hub-insights";
 import FurniturePreview from "@/app/furniture-preview";
 import { flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
@@ -234,6 +235,7 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
  {screen==="hub"&&<main className="page-width hub-page compact-hub"><h1 className="sr-only">Services BDG</h1>
   <RemiseTicker rate={remiseRate}/>
   <div className="service-tiles">{navigation.map(([id,label])=><button className={`service-tile service-tile-${id}`} key={id} onClick={()=>go(id)}><span className="tile-icon"><ServiceIcon id={id} size={100}/></span><span>{label}</span><ChevronRight size={16} className="tile-arrow"/></button>)}</div>
+  <BuyerHubInsights key={buyer.id} rate={remiseRate} onOpenRemise={()=>go("remise")} onOpenRequests={()=>go("requests")}/>
   <button type="button" className="hub-contact" onClick={()=>go("autres")} aria-label="Contacter BDG"><Mail size={21}/></button>
  </main>}
  {isExtraService(screen)&&<main key={screen} className="page-width document-page">
