@@ -27,8 +27,8 @@ function ServiceIcon({id,size=40}:{id:string;size?:number}) {if(isDocumentKind(i
 const paths: Record<string,string> = {access:"/",register:"/inscription",hub:"/marches-publics",remise:"/remise",requests:"/demandes",facture:"/demandes?type=facture",livraison:"/demandes?type=livraison",echantillons:"/demandes?type=echantillons"};
 async function api(action:string,data:Record<string,unknown>={}) {await initializeClientVisit();const r=await fetch("/api/tawzala",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,...data})});const result=await r.json() as ApiReply;if(!r.ok)throw Object.assign(new Error(result.error||"La demande n’a pas pu être enregistrée."),{status:r.status});return result;}
 function Brand({large=false,name=BRAND_NAME}:{large?:boolean;name?:string}) {return <span className={`brand ${large?"brand-large":""}`} aria-label={name}><img className="brand-crown" src="/images/tawzala-crown.png" width={104} height={64} alt="" aria-hidden="true"/><span className="brand-word">{name.split("🕸").map((word,i)=><span key={i}>{i>0&&<span className="brand-web">🕸</span>}{word}</span>)}</span></span>;}
-function AccessStrip({label, paused, children, onToggle}:{label:string;paused:boolean;children:React.ReactNode;onToggle?:()=>void}) {
- return <div className="access-strip" data-paused={paused}>
+function AccessStrip({label, paused, children, onToggle, flags=false}:{label:string;paused:boolean;children?:React.ReactNode;onToggle?:()=>void;flags?:boolean}) {
+ return <div className={flags?"access-strip access-flag-strip":"access-strip"} data-paused={paused}>
   <span className="sr-only">{label}</span>
   <div className="access-strip-track" aria-hidden="true">
    {[0, 1].map(group=><div className="access-strip-group" key={group}>
@@ -126,7 +126,14 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
  const [welcomePaused,setWelcomePaused]=useState(false);
  const access=screen==="access"||screen==="register";
 
- return <><TooltipProvider delayDuration={180}><Toaster position="top-center" theme="light"/><header className={`site-header${access?" access-header":""}${screen==="access"?" access-header-emblem":""}`}>{screen==="access"?<AccessStrip label="Drapeau du Maroc" paused={welcomePaused}><img className="access-flag" src="/images/morocco-flag.svg" width={60} height={40} alt=""/></AccessStrip>:<button className="brand-link" onClick={()=>go(authenticated&&buyer?"hub":"access")} aria-label={brandName+" — Accueil"}><Brand name={brandName}/></button>}{access?(screen==="register"?<span className="header-private" aria-label="Espace privé"><ShieldCheck size={17}/><span>Espace privé</span></span>:null):<><nav className="desktop-nav" aria-label="Navigation principale">{navigation.map(([id,label])=><Tooltip key={id}><TooltipTrigger asChild><button className={(screen==="requests"?documentKind:screen)===id?"active":""} aria-label={label} aria-current={(screen==="requests"?documentKind:screen)===id?"page":undefined} onClick={()=>go(id)}><ServiceIcon id={id}/></button></TooltipTrigger><TooltipContent side="bottom" sideOffset={10}>{label}</TooltipContent></Tooltip>)}</nav><div className="header-actions"><button className="user-name account-trigger" onClick={()=>setAccountOpen(true)} disabled={!buyer||!hasAccount} aria-label="Ouvrir mon compte"><UserRound size={16}/><span>{buyer?.name.split(" ")[0]}</span></button><button className="icon-button logout-desktop" aria-label="Se déconnecter" onClick={logout} disabled={busy}><LogOut size={19}/></button><button className="icon-button mobile-toggle" aria-label="Ouvrir le menu" onClick={()=>setMenuOpen(true)}><Menu size={23}/></button></div></>}</header>
+ return <><TooltipProvider delayDuration={180}><Toaster position="top-center" theme="light"/><header className={`site-header${access?" access-header":""}${screen==="access"?" access-header-emblem":""}`}>{screen==="access"?<>
+  <AccessStrip label="Drapeau du Maroc" paused={welcomePaused} flags/>
+  <div className="access-masthead">
+   <Brand name={brandName}/>
+   <div className="access-masthead-title"><strong>Portail de l’acheteur public</strong><span>Royaume du Maroc</span></div>
+   <LockKeyhole className="access-masthead-lock" size={19} aria-hidden="true"/>
+  </div>
+ </>:<button className="brand-link" onClick={()=>go(authenticated&&buyer?"hub":"access")} aria-label={brandName+" — Accueil"}><Brand name={brandName}/></button>}{access?(screen==="register"?<span className="header-private" aria-label="Espace privé"><ShieldCheck size={17}/><span>Espace privé</span></span>:null):<><nav className="desktop-nav" aria-label="Navigation principale">{navigation.map(([id,label])=><Tooltip key={id}><TooltipTrigger asChild><button className={(screen==="requests"?documentKind:screen)===id?"active":""} aria-label={label} aria-current={(screen==="requests"?documentKind:screen)===id?"page":undefined} onClick={()=>go(id)}><ServiceIcon id={id}/></button></TooltipTrigger><TooltipContent side="bottom" sideOffset={10}>{label}</TooltipContent></Tooltip>)}</nav><div className="header-actions"><button className="user-name account-trigger" onClick={()=>setAccountOpen(true)} disabled={!buyer||!hasAccount} aria-label="Ouvrir mon compte"><UserRound size={16}/><span>{buyer?.name.split(" ")[0]}</span></button><button className="icon-button logout-desktop" aria-label="Se déconnecter" onClick={logout} disabled={busy}><LogOut size={19}/></button><button className="icon-button mobile-toggle" aria-label="Ouvrir le menu" onClick={()=>setMenuOpen(true)}><Menu size={23}/></button></div></>}</header>
  {access?<main className={`access-layout access-blue${screen==="access"?" access-minimal access-emblem":""}`}>
   <section className="access-form-panel"><div className="access-card">
    {screen==="register"&&<>
@@ -134,14 +141,26 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
     <h1>Acheteur public</h1>
     <p className="lead">{accountMode==="signin"?"Retrouvez votre compte avec votre email et votre mot de passe.":buyer?"Vos coordonnées sont enregistrées. Choisissez votre mot de passe pour vos prochaines visites.":"Créez votre compte pour accéder aux services BDG."}</p>
    </>}
-   {screen==="access"?<form className="access-form" onSubmit={login}>
+   {screen==="access"?<>
+    <div className="access-card-title">
+     <img src="/images/tawzala-crown.png" width={48} height={30} alt=""/>
+     <h1>Royaume du Maroc</h1>
+     <p>Portail de l’acheteur public · {brandName}</p>
+    </div>
+    <form className="access-form" onSubmit={login}>
+    <p className="access-form-caption">Connexion sécurisée</p>
     <Field label="Mot de passe d’accès" icon={<LockKeyhole size={19}/>}>
      <input name="password" type={passwordVisible?"text":"password"} required maxLength={128} placeholder="Votre mot de passe" autoComplete="current-password"/>
      <button type="button" className="show-password" aria-label={passwordVisible?"Masquer le mot de passe":"Afficher le mot de passe"} onClick={()=>setPasswordVisible(!passwordVisible)}>{passwordVisible?<EyeOff size={19}/>:<Eye size={19}/>}</button>
     </Field>
     {error&&<p className="form-error" role="alert">{error}</p>}
     <button className="primary-button" disabled={busy||!ready}>{busy?<Loader2 className="spin" size={19}/>:<LockKeyhole size={17}/>}Entrer</button>
-   </form>:<div className="account-entry">
+   </form>
+  <footer className="access-emblem-footer">
+   <span>© {new Date().getFullYear()} {brandName}</span>
+   <a href="https://commons.wikimedia.org/wiki/File:Coat_of_arms_of_Morocco_(simple).svg" target="_blank" rel="noreferrer">Crédits de l’emblème</a>
+  </footer>
+   </>:<div className="account-entry">
  <Tabs value={accountMode} onValueChange={value=>{setAccountMode(value as "signup"|"signin");setError("");setAccountPasswordVisible(false);}}>
   <TabsList className="account-tabs" aria-label="Inscription ou connexion">
    <TabsTrigger value="signup" disabled={busy}>{buyer?"Activer mon compte":"Créer un compte"}</TabsTrigger>
@@ -179,13 +198,8 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
  </form>
 </div>}</div>{screen==="register"&&<div className="access-copyright">© {new Date().getFullYear()} {brandName} <span>Portail des acheteurs publics</span></div>}</section>
  {screen==="access"&&<>
-  <footer className="access-emblem-footer">
-   <span>© {new Date().getFullYear()} {brandName}</span>
-   <a href="https://commons.wikimedia.org/wiki/File:Coat_of_arms_of_Morocco_(simple).svg" target="_blank" rel="noreferrer">Crédits de l’emblème</a>
-  </footer>
-  <AccessStrip label={brandName} paused={welcomePaused}><Brand name={brandName}/></AccessStrip>
-  <AccessStrip label="Bienvenue acheteur public" paused={welcomePaused} onToggle={()=>setWelcomePaused(paused=>!paused)}>
-   <i>Bienvenue</i> acheteur public
+  <AccessStrip label="BDG · Bienvenue acheteur public" paused={welcomePaused} onToggle={()=>setWelcomePaused(paused=>!paused)}>
+   <Brand name={brandName}/> <span className="access-strip-dot">·</span> Bienvenue acheteur public
   </AccessStrip>
  </>}
  </main>:!ready||!buyer?<main className="page-width loading-page"><Skeleton className="h-12 w-72 mb-8"/><Skeleton className="h-72 w-full"/><p>Chargement de votre espace…</p>{error&&<p role="alert">{error}</p>}</main>:<><div className="session-strip"><span><ShieldCheck size={14}/>Espace acheteur public</span><span>Bienvenue, {buyer.name}</span></div>
