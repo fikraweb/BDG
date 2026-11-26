@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
 import { LockKeyhole, Eye, EyeOff, ShieldCheck, LogOut, Calculator, Clock, CheckCircle2, ChevronRight, Building2, UserRound, Mail, Phone, Loader2, Menu, Download, BadgePercent, Pause, Play } from "lucide-react";
-import { initializeClientVisit, endClientVisit, finishClientPage, observeVisitNavigation, isInternalVisitExit, prepareAdminVisit, forgetClientContinuation } from "@/lib/client-visit";
+import { initializeClientVisit, endClientVisit, finishClientPage, isInternalVisitExit, prepareAdminVisit, forgetClientContinuation } from "@/lib/client-visit";
 import { DOCUMENT_TYPES, isDocumentKind, type DocumentKind } from "@/lib/document-types";
 import DocumentRequests from "@/app/document-requests";
 import CityField from "@/app/city-field";
@@ -26,7 +26,9 @@ const navigation = [["remise","Remise d’achat"],["facture","Demande de facture
 function ServiceIcon({id,size=40}:{id:string;size?:number}) {if(isDocumentKind(id))return <img className="service-asset-icon" src={"/images/service-"+id+"-cinematic.png"} width={size} height={size} alt="" aria-hidden="true" style={{width:size,height:size}}/>;const source="/images/service-remise-cinematic.png";return <img className="service-asset-icon" src={source} width={size} height={size} alt="" aria-hidden="true" style={{width:size,height:size}}/>;}
 const paths: Record<string,string> = {access:"/",register:"/inscription",hub:"/marches-publics",remise:"/remise",requests:"/demandes",facture:"/demandes?type=facture",livraison:"/demandes?type=livraison",echantillons:"/demandes?type=echantillons"};
 async function api(action:string,data:Record<string,unknown>={}) {await initializeClientVisit();const r=await fetch("/api/tawzala",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,...data})});const result=await r.json() as ApiReply;if(!r.ok)throw Object.assign(new Error(result.error||"La demande n’a pas pu être enregistrée."),{status:r.status});return result;}
-function Brand({large=false,name=BRAND_NAME}:{large?:boolean;name?:string}) {return <span className={`brand ${large?"brand-large":""}`} aria-label={name}><span className="brand-word">{name.split("🕸").map((word,i)=><span key={i}>{i>0&&<span className="brand-web">🕸</span>}{word}</span>)}</span></span>;}
+function Brand({name=BRAND_NAME}:{name?:string}) {
+ return <span className="brand"><img className="brand-logo" src="/images/bdg-logo.webp" width={44} height={44} alt=""/><span className="brand-word">{name}</span></span>;
+}
 function AccessStrip({label, paused, children, onToggle, flags=false}:{label:string;paused:boolean;children?:React.ReactNode;onToggle?:()=>void;flags?:boolean}) {
  return <div className={flags?"access-strip access-flag-strip":"access-strip"} data-paused={paused}>
   <span className="sr-only">{label}</span>
@@ -85,11 +87,10 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
  useEffect(()=>{const c=(document as unknown as {modelContext?:{registerTool:(tool:unknown,options:{signal:AbortSignal})=>Promise<void>|void}}).modelContext;if(!c?.registerTool||screen!=="remise")return;const life=new AbortController();Promise.resolve(c.registerTool({name:"calculate_bdg_remise",title:"Calculer une remise",description:"Calcule une remise et met à jour le calcul affiché. N’envoie aucune demande.",inputSchema:{type:"object",properties:{amount:{type:"number",exclusiveMinimum:0,maximum:1e10}},required:["amount"],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute:async(input:unknown)=>{const d=input as {amount:number};if(typeof d.amount!=="number")throw new Error("Montant numérique obligatoire.");const result=calculateRemise(d.amount,remiseRate);setAmount(String(d.amount));submissionKey.current=null;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));return result;}},{signal:life.signal})).catch(()=>{});return()=>life.abort();},[screen,remiseRate]);
  function clearPrivateSpace(){authEpoch.current++;setReady(true);setBusy(false);setBuyer(null);setAuthenticated(false);setHasAccount(false);setAccountOpen(false);setMenuOpen(false);setReceipt(null);setAmount("0");setPaymentMethod("");setPasswordVisible(false);setAccountPasswordVisible(false);submissionKey.current=null;setStore(value=>({...value,products:[]}));setScreen("access");setError("");}
  useEffect(()=>{
-  const stopNavigation = observeVisitNavigation();
-  function leave(){if(isInternalVisitExit())return;flushSync(clearPrivateSpace);void finishClientPage().catch(()=>{});}
+  function leave(){if(isInternalVisitExit())return;flushSync(clearPrivateSpace);finishClientPage();}
   function restore(event:PageTransitionEvent){if(event.persisted){flushSync(()=>{clearPrivateSpace();setReady(false);});router.replace("/");void endClientVisit().then(()=>initializeClientVisit()).then(()=>setReady(true)).catch(error=>{setReady(true);setError((error as Error).message);});}}
   window.addEventListener("pagehide",leave);window.addEventListener("pageshow",restore);
-  return()=>{stopNavigation();window.removeEventListener("pagehide",leave);window.removeEventListener("pageshow",restore);};
+  return()=>{window.removeEventListener("pagehide",leave);window.removeEventListener("pageshow",restore);};
  },[]);
  async function login(e:FormEvent<HTMLFormElement>){e.preventDefault();if(!ready||busy)return;const epoch=++authEpoch.current;setBusy(true);setError("");try{const d=await api("login",{password:new FormData(e.currentTarget).get("password")});if(epoch!==authEpoch.current)return;setAuthenticated(true);if(d.store)setStore(d.store);setBuyer(d.buyer);setHasAccount(!!d.hasAccount);go("register","signin");}catch(e){setError((e as Error).message);}finally{setBusy(false);}}
  async function register(e:FormEvent<HTMLFormElement>){e.preventDefault();if(!ready||busy)return;const epoch=++authEpoch.current;setBusy(true);setError("");try{const d=await api("register",Object.fromEntries(new FormData(e.currentTarget)));if(epoch!==authEpoch.current)return;if(d.store)setStore(d.store);setBuyer(d.buyer);setHasAccount(!!d.hasAccount);go("hub");}catch(e){setError((e as Error).message);}finally{setBusy(false);}}
@@ -127,7 +128,7 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
 
  return <><TooltipProvider delayDuration={180}><Toaster position="top-center" theme="light"/><header className={`site-header${access?" access-header access-header-emblem":""}`}>{access?<>
   <AccessStrip label="Drapeau du Maroc" paused={welcomePaused} flags/>
-  <AccessStrip label={brandName} paused={welcomePaused}>{brandName}</AccessStrip>
+  <AccessStrip label={brandName} paused={welcomePaused}><Brand name={brandName}/></AccessStrip>
  </>:<button className="brand-link" onClick={()=>go(authenticated&&buyer?"hub":"access")} aria-label={brandName+" — Accueil"}><Brand name={brandName}/></button>}{!access&&<><nav className="desktop-nav" aria-label="Navigation principale">{navigation.map(([id,label])=><Tooltip key={id}><TooltipTrigger asChild><button className={(screen==="requests"?documentKind:screen)===id?"active":""} aria-label={label} aria-current={(screen==="requests"?documentKind:screen)===id?"page":undefined} onClick={()=>go(id)}><ServiceIcon id={id}/></button></TooltipTrigger><TooltipContent side="bottom" sideOffset={10}>{label}</TooltipContent></Tooltip>)}</nav><div className="header-actions"><button className="user-name account-trigger" onClick={()=>setAccountOpen(true)} disabled={!buyer||!hasAccount} aria-label="Ouvrir mon compte"><UserRound size={16}/><span>{buyer?.name.split(" ")[0]}</span></button><button className="icon-button logout-desktop" aria-label="Se déconnecter" onClick={logout} disabled={busy}><LogOut size={19}/></button><button className="icon-button mobile-toggle" aria-label="Ouvrir le menu" onClick={()=>setMenuOpen(true)}><Menu size={23}/></button></div></>}</header>
  {access?<main className={`access-layout access-blue access-emblem ${screen==="access"?"access-minimal":`access-registration access-registration-${accountMode}`}`}>
   <section className="access-form-panel"><div className="access-card">
@@ -137,6 +138,7 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
    </>}
    {screen==="access"?<>
     <div className="access-card-title">
+     <img className="access-card-logo" src="/images/bdg-logo.webp" width={68} height={68} alt={brandName}/>
      <h1>Royaume du Maroc</h1>
     </div>
     <form className="access-form" onSubmit={login}>
@@ -153,7 +155,7 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
    <a href="https://commons.wikimedia.org/wiki/File:Coat_of_arms_of_Morocco_(simple).svg" target="_blank" rel="noreferrer">Crédits de l’emblème</a>
   </footer>
    </>:<div className="account-entry">
- <Tabs value={accountMode} onValueChange={value=>{setAccountMode(value as "signup"|"signin");setError("");setAccountPasswordVisible(false);}}>
+ <Tabs value={accountMode} onValueChange={value=>{setAccountMode(value as "signup"|"signin");setError("");setAccountPasswordVisible(false);window.history.replaceState(null,"",value==="signin"?"/inscription?mode=connexion":"/inscription");}}>
   <TabsList className="account-tabs" aria-label="Inscription ou connexion">
    <TabsTrigger value="signup" disabled={busy}>{buyer?"Activer mon compte":"Créer un compte"}</TabsTrigger>
    <TabsTrigger value="signin" disabled={busy}>Se connecter</TabsTrigger>

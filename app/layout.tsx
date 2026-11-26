@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Votre espace acheteur public pour calculer votre remise et demander vos documents.",
   robots: { index: false, follow: false },
   icons: {
-    icon: { url: "/images/morocco-flag.svg", type: "image/svg+xml" },
+    icon: { url: "/images/bdg-logo.webp", type: "image/webp" },
   },
 };
 
