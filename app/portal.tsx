@@ -5,7 +5,7 @@ import { extraServices, isExtraService } from "@/lib/buyer-services";
 import FurniturePreview from "@/app/furniture-preview";
 import { flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
-import { LockKeyhole, Eye, EyeOff, ShieldCheck, LogOut, Calculator, Clock, CheckCircle2, ChevronRight, Building2, UserRound, Mail, Phone, Loader2, Menu, Download, BadgePercent, Pause, Play, FileCheck2, Scale, MessagesSquare, BriefcaseBusiness } from "lucide-react";
+import { LockKeyhole, Eye, EyeOff, ShieldCheck, LogOut, Calculator, Clock, CheckCircle2, ChevronRight, Building2, UserRound, Mail, Phone, Loader2, Menu, Download, BadgePercent, Pause, Play, FileCheck2, Scale, MessagesSquare, BriefcaseBusiness, Armchair, Table2, ReceiptText, Truck, PackageCheck } from "lucide-react";
 import { initializeClientVisit, endClientVisit, finishClientPage, isInternalVisitExit, prepareAdminVisit, forgetClientContinuation } from "@/lib/client-visit";
 import { DOCUMENT_TYPES, isDocumentKind, type DocumentKind } from "@/lib/document-types";
 import DocumentRequests from "@/app/document-requests";
@@ -34,24 +34,27 @@ const navigation = [
  ["echantillons", "Demande de bon de livraison des échantillons"],
  ...Object.entries(extraServices),
 ];
-const serviceImages: Record<string, string> = {
- remise: "/images/service-remise-cinematic.png",
- imported: "/images/service-imported.webp",
- moroccan: "/images/service-moroccan.webp",
+const serviceIcons = {
+ remise: BadgePercent,
+ imported: Table2,
+ moroccan: Armchair,
+ facture: ReceiptText,
+ livraison: Truck,
+ echantillons: PackageCheck,
+ caution: ShieldCheck,
+ references: FileCheck2,
+ reglementation: Scale,
+ echanges: MessagesSquare,
+ autres: BriefcaseBusiness,
 };
-const serviceIcons = { caution: ShieldCheck, references: FileCheck2, reglementation: Scale, echanges: MessagesSquare, autres: BriefcaseBusiness };
 function ServiceIcon({id,size=40}:{id:string;size?:number}) {
- if (isExtraService(id)) {
-  const Icon = serviceIcons[id];
-  return <Icon className="service-extra-icon" size={Math.round(size * .58)} strokeWidth={1.65} aria-hidden="true"/>;
- }
- const source = isDocumentKind(id) ? `/images/service-${id}-cinematic.png` : serviceImages[id];
- return <img className="service-asset-icon" src={source} width={size} height={size} alt="" aria-hidden="true" style={{width:size,height:size}}/>;
+ const Icon = Object.hasOwn(serviceIcons, id) ? serviceIcons[id as keyof typeof serviceIcons] : FileCheck2;
+ return <Icon className="service-outline-icon" size={Math.round(size * .56)} strokeWidth={1.65} aria-hidden="true"/>;
 }
 const paths: Record<string,string> = {access:"/",register:"/inscription",hub:"/marches-publics",remise:"/remise",requests:"/demandes",facture:"/demandes?type=facture",livraison:"/demandes?type=livraison",echantillons:"/demandes?type=echantillons",imported:"/catalogue/bureau",moroccan:"/catalogue/maroc",...Object.fromEntries(Object.keys(extraServices).map(id=>[id,`/services/${id}`]))};
 async function api(action:string,data:Record<string,unknown>={}) {await initializeClientVisit();const r=await fetch("/api/tawzala",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,...data})});const result=await r.json() as ApiReply;if(!r.ok)throw Object.assign(new Error(result.error||"La demande n’a pas pu être enregistrée."),{status:r.status});return result;}
 function Brand({name=BRAND_NAME}:{name?:string}) {
- return <span className="brand"><img className="brand-logo" src="/images/bdg-logo.webp" width={44} height={44} alt=""/><span className="brand-word">{name}</span></span>;
+ return <span className="brand"><img className="brand-logo" src="/images/bdg-logo.webp" width={32} height={32} alt=""/><span className="brand-word">{name}</span></span>;
 }
 function AccessStrip({label, paused, children, onToggle, flags=false}:{label:string;paused:boolean;children?:React.ReactNode;onToggle?:()=>void;flags?:boolean}) {
  return <div className={flags?"access-strip access-flag-strip":"access-strip"} data-paused={paused}>
@@ -153,7 +156,7 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
  return <><TooltipProvider delayDuration={180}><Toaster position="top-center" theme="light"/><header className={`site-header${access?" access-header access-header-emblem":""}`}>{access?<>
   <AccessStrip label="Drapeau du Maroc" paused={welcomePaused} flags/>
   <AccessStrip label={brandName} paused={welcomePaused}><Brand name={brandName}/></AccessStrip>
- </>:<button className="brand-link" onClick={()=>go(authenticated&&buyer?"hub":"access")} aria-label={brandName+" — Accueil"}><Brand name={brandName}/></button>}{!access&&<><nav className="desktop-nav" aria-label="Navigation principale">{navigation.map(([id,label])=><Tooltip key={id}><TooltipTrigger asChild><button className={(screen==="requests"?documentKind:screen)===id?"active":""} aria-label={label} aria-current={(screen==="requests"?documentKind:screen)===id?"page":undefined} onClick={()=>go(id)}><ServiceIcon id={id}/></button></TooltipTrigger><TooltipContent side="bottom" sideOffset={10}>{label}</TooltipContent></Tooltip>)}</nav><div className="header-actions"><button className="user-name account-trigger" onClick={()=>setAccountOpen(true)} disabled={!buyer||!hasAccount} aria-label="Ouvrir mon compte"><UserRound size={16}/><span>{buyer?.name.split(" ")[0]}</span></button><button className="icon-button logout-desktop" aria-label="Se déconnecter" onClick={logout} disabled={busy}><LogOut size={19}/></button><button className="icon-button mobile-toggle" aria-label="Ouvrir le menu" onClick={()=>setMenuOpen(true)}><Menu size={23}/></button></div></>}</header>
+ </>:<><nav className="desktop-nav" aria-label="Navigation principale">{navigation.map(([id,label])=><Tooltip key={id}><TooltipTrigger asChild><button className={(screen==="requests"?documentKind:screen)===id?"active":""} aria-label={label} aria-current={(screen==="requests"?documentKind:screen)===id?"page":undefined} onClick={()=>go(id)}><ServiceIcon id={id}/></button></TooltipTrigger><TooltipContent side="bottom" sideOffset={10}>{label}</TooltipContent></Tooltip>)}</nav><div className="header-actions"><button className="user-name account-trigger" onClick={()=>setAccountOpen(true)} disabled={!buyer||!hasAccount} aria-label="Ouvrir mon compte"><UserRound size={16}/><span>{buyer?.name.split(" ")[0]}</span></button><button className="icon-button logout-desktop" aria-label="Se déconnecter" onClick={logout} disabled={busy}><LogOut size={19}/></button><button className="icon-button mobile-toggle" aria-label="Ouvrir le menu" onClick={()=>setMenuOpen(true)}><Menu size={23}/></button><button className="brand-link" onClick={()=>go(authenticated&&buyer?"hub":"access")} aria-label={brandName+" — Accueil"}><Brand name={brandName}/></button></div></>}</header>
  {access?<main className={`access-layout access-blue access-emblem ${screen==="access"?"access-minimal":`access-registration access-registration-${accountMode}`}`}>
   {screen==="access"&&<FurniturePreview/>}
   <section className="access-form-panel"><div className="access-card">

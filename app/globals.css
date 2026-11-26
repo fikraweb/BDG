@@ -564,7 +564,7 @@
   .access-registration .input-wrap input { font-size: 1rem; }
 }
 
-.brand-logo { display: block; flex-shrink: 0; object-fit: contain; }
+.brand-logo { display: block; flex-shrink: 0; width: 32px; height: 32px; max-width: 32px; max-height: 32px; object-fit: contain; }
 .access-strip .brand { display: inline-flex; gap: 8px; align-items: center; vertical-align: middle; color: inherit; }
 .access-strip .brand-logo { width: 29px; height: 29px; }
 .access-strip .brand-word { font: inherit; }
@@ -685,18 +685,18 @@
   border-color: #b79b64;
   background: #f3f7fa;
 }
-.service-extra-icon { color: #193f52; }
-.service-tile-caution .tile-icon,
-.service-tile-references .tile-icon,
-.service-tile-reglementation .tile-icon {
-  background: radial-gradient(ellipse at 50% 38%, #fffdf5, #ece4ca 82%);
+.service-outline-icon { display: block; flex-shrink: 0; color: #193f52; }
+.compact-hub .service-tile .tile-icon {
+  background: radial-gradient(ellipse at 50% 38%, #fbfdfc, #e1ecef 82%);
 }
-.service-tile-echanges .tile-icon,
-.service-tile-autres .tile-icon {
-  background: radial-gradient(ellipse at 50% 38%, #f9fffd, #dbeee9 82%);
+.site-header .header-actions { margin-inline-start: auto; }
+.site-header .header-actions .brand-link { margin-inline-start: 6px; }
+.site-header .header-actions .brand { gap: 7px; white-space: nowrap; }
+.site-header .header-actions .brand-word { font-size: 1rem; }
+
+@media (max-width: 760px) {
+  .compact-hub .service-outline-icon { width: 40px; height: 40px; }
 }
-.service-tile-echanges .service-extra-icon,
-.service-tile-autres .service-extra-icon { color: #245641; }
 .hub-contact {
   position: fixed;
   right: 20px;
