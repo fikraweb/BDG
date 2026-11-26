@@ -693,15 +693,42 @@
 }
 
 
-.compact-hub .service-tile {
-  color: #0e2b45;
-  background: linear-gradient(145deg, #fff, #f1f6fa);
+body:has(.hub-header) { background: #0d3928; }
+.site-header.hub-header {
+  color: #fff3d8;
+  background: linear-gradient(115deg, #d8a9573d, #f5d48e24);
+  border-bottom-color: #e3b97482;
+  backdrop-filter: blur(14px);
 }
+.hub-header :is(.brand, .icon-button, .account-trigger) { color: inherit; }
+.hub-header .desktop-nav button:is(:hover, :focus-visible, .active),
+.hub-header .header-actions button:hover {
+  background: #f5d48e29;
+  border-color: #e3b97482;
+}
+.hub-header + .session-strip {
+  color: #fff3d8;
+  background: #d8a95724;
+  border-bottom-color: #e3b97447;
+}
+.compact-hub .service-tile {
+  color: #fff5de;
+  background: linear-gradient(145deg, #eac37340, #bd873824);
+  border-color: #e5bd7b87;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 8px 22px #041b1345;
+}
+.compact-hub .service-tile::before {
+  background: linear-gradient(90deg, #d2a152, #f4d79a, #c69249);
+}
+.compact-hub .tile-arrow { color: #f0d28f; }
 .compact-hub .service-tile:hover,
 .compact-hub .service-tile:focus-visible {
-  border-color: #b79b64;
-  background: #f3f7fa;
+  border-color: #f2d08a;
+  background: linear-gradient(145deg, #eac37355, #bd873838);
 }
+.compact-hub .service-tile:focus-visible,
+.hub-header button:focus-visible { outline: 2px solid #f5d48e; outline-offset: 3px; }
 .compact-hub .service-tile .tile-icon {
   background: radial-gradient(ellipse at 50% 38%, #fbfdfc, #e6eef8 82%);
 }
