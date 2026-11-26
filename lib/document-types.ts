@@ -3,11 +3,21 @@ import type { Company } from "@/lib/company";
 import type { ProcurementType } from "@/lib/procurement";
 import { formatDocumentReference } from "@/lib/document-reference";
 
-export const DOCUMENT_TYPES = { facture: "Facture", livraison: "Bon de livraison", echantillons: "Bon de livraison des échantillons" } as const;
+const BUYER_DOCUMENT_TYPES = { facture: "Facture", livraison: "Bon de livraison", echantillons: "Bon de livraison des échantillons" } as const;
+const STATEMENT_DOCUMENT_TYPES = {
+  declaration: "Déclaration sur l’honneur",
+  engagement: "Acte d’engagement",
+  garantie: "Attestation de garantie",
+} as const;
+export const DOCUMENT_TYPES = { ...BUYER_DOCUMENT_TYPES, ...STATEMENT_DOCUMENT_TYPES };
+export function isBuyerDocumentKind(value: unknown): value is keyof typeof BUYER_DOCUMENT_TYPES {
+  return typeof value === "string" && Object.hasOwn(BUYER_DOCUMENT_TYPES, value);
+}
+export function isStatementDocument(kind: DocumentKind) { return Object.hasOwn(STATEMENT_DOCUMENT_TYPES, kind); }
 export type DocumentKind = keyof typeof DOCUMENT_TYPES;
 export type DocumentContact = { name: string; maitreOuvrage: string; reference: string; devisReference: string; objet: string; phone: string; email: string; city: string; procurementType: ProcurementType; note: string };
 export type DocumentLine = { designation: string; unit: string; quantity: number; unitPrice: number };
-export type DocumentDraft = { number: string; date: string; place: string; bank: string; rib: string; taxRate: number; items: DocumentLine[]; note: string; contact: DocumentContact; authority?: string; tenderReference?: string; marketReference?: string };
+export type DocumentDraft = { number: string; date: string; place: string; bank: string; rib: string; taxRate: number; items: DocumentLine[]; note: string; contact: DocumentContact; authority?: string; tenderReference?: string; marketReference?: string; statement?: string };
 export type DocumentRequest = { id: string; kind: DocumentKind; origin?: "customer" | "admin"; contact: DocumentContact; createdAt: number; updatedAt: number; revision: number; draft: DocumentDraft; numberAssigned?: boolean; status: "new" | "draft" | "pending" | "failed" | "sent"; companyNotification: string; customerNotification: string; hasPdf: boolean; locked: boolean; companyDelivery: string | null; customerDelivery: string | null; companyError?: string | null; customerError?: string | null };
 export type IssuedDocument = { requestId: string; kind: DocumentKind; draft: DocumentDraft; company: Company; createdAt: number };
 export function isDocumentKind(value: unknown): value is DocumentKind { return typeof value === "string" && Object.hasOwn(DOCUMENT_TYPES, value); }
@@ -20,7 +30,7 @@ export function documentTotals(draft: DocumentDraft) {
 }
 export function newDocumentDraft(id: string, kind: DocumentKind, contact: DocumentContact, company: Company): DocumentDraft {
   const year = new Date().getUTCFullYear();
-  return { number: formatDocumentReference(1, year), date: new Date().toISOString().slice(0, 10), place: "", bank: "BANQUE CENTRALE POPULAIRE AGENCE AL BASATINE BOUZNIKA", rib: company.rib, taxRate: 20, items: [{ designation: "", unit: "U", quantity: 1, unitPrice: 0 }], note: "", contact: { ...contact, note: "" } };
+  return { number: formatDocumentReference(1, year), date: new Date().toISOString().slice(0, 10), place: "", bank: "BANQUE CENTRALE POPULAIRE AGENCE AL BASATINE BOUZNIKA", rib: company.rib, taxRate: 20, items: isStatementDocument(kind) ? [] : [{ designation: "", unit: "U", quantity: 1, unitPrice: 0 }], note: "", contact: { ...contact, note: "" } };
 }
 export function requestStatus(request: DocumentRequest) { return request.hasPdf ? "Document disponible" : request.status === "new" ? "Demande enregistrée" : "En cours de traitement"; }
 

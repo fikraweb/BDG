@@ -332,3 +332,15 @@ body:has(.admin-dashboard) .document-editor-dialog .document-form-grid :is(input
   border-color: var(--admin-line);
 }
 body:has(.admin-dashboard) .document-editor-dialog .document-form-grid :is(input, select, textarea):focus { outline-color: var(--ring); }
+
+.admin-document-create-menu {
+  width: min(320px, calc(100vw - 32px));
+  background: #fff8e9;
+  color: #19392e;
+  border-color: #d0bc8a;
+}
+.admin-document-create-menu [data-slot="dropdown-menu-item"] { min-height: 40px; white-space: normal; }
+.admin-document-create-menu [data-slot="dropdown-menu-item"][data-highlighted] {
+  background: #e8f0e5;
+  color: #19392e;
+}

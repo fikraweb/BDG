@@ -3,7 +3,7 @@ import { readSettings } from "@/lib/site-store";
 import { createBusinessPdf } from "@/lib/document-pdf";
 import { documentEmails } from "@/lib/document-email";
 import { saveDocumentBytes, readDocumentBytes, findDocumentBytes } from "@/lib/document-storage";
-import { documentBuyer, documentTotals, isDocumentKind, newDocumentDraft, type DocumentContact, type DocumentDraft, type DocumentKind, type DocumentRequest, type IssuedDocument } from "@/lib/document-types";
+import { documentBuyer, documentTotals, isBuyerDocumentKind, isDocumentKind, isStatementDocument, newDocumentDraft, type DocumentContact, type DocumentDraft, type DocumentKind, type DocumentRequest, type IssuedDocument } from "@/lib/document-types";
 import type { Buyer } from "@/lib/catalog";
 import type { Company } from "@/lib/company";
 import { NEXT_DOCUMENT_NUMBER_SQL, numberingParameters } from "@/lib/document-numbering";
@@ -29,9 +29,10 @@ function contactFields(input: Record<string, unknown>, buyer?: Buyer, administra
   const maitreOuvrage = textField(input.maitreOuvrage ?? buyer?.maitreOuvrage, "Le maître d’ouvrage", 200);
   return { name: administrative ? maitreOuvrage : textField(input.name ?? buyer?.name, "Le nom du client", 160), maitreOuvrage, reference: administrative && !input.reference ? "" : textField(input.reference, "La référence du bon de commande / marché", 100), devisReference: input.devisReference ? textField(input.devisReference, "La référence du devis", 100) : "", objet: textField(input.objet, "L’objet de la prestation", 1000), phone: administrative ? "" : phoneField(input.phone ?? buyer?.phone), email: emailField(input.email ?? buyer?.email), city: administrative ? "" : cityField(input.city ?? buyer?.city), procurementType: procurementField(input.procurementType ?? buyer?.procurementType), note: "" };
 }
-export async function listDocumentRequests(buyerId?: string, query = "") {
+export async function listDocumentRequests(buyerId?: string, query = "", origin?: "customer" | "admin") {
   const values: string[] = [], where: string[] = [];
   if (buyerId) { where.push("buyer_id=?"); values.push(buyerId); }
+  else if (origin) where.push(origin === "customer" ? "buyer_id IS NOT NULL" : "buyer_id IS NULL");
   if (query) { where.push("(instr(lower(id),?)>0 OR instr(lower(details),?)>0 OR instr(lower(draft),?)>0)"); values.push(...Array(3).fill(query.slice(0, 160).toLowerCase())); }
   const result = await db().prepare("SELECT * FROM document_requests" + (where.length ? " WHERE " + where.join(" AND ") : "") + " ORDER BY created_at DESC LIMIT 100").bind(...values).all<Row>();
   return result.results.map(row => { const value = summary(row); if (!buyerId) return value; const { draft, companyDelivery, customerDelivery, companyError, customerError, ...publicValue } = value; return publicValue; });
@@ -43,7 +44,7 @@ export async function createAdminDocument(body: Record<string, unknown>) {
   const existing = await db().prepare("SELECT * FROM document_requests WHERE id=? AND buyer_id IS NULL").bind(id).first<Row>();
   if (existing) return summary(existing);
   const contact = contactFields((body.draft as DocumentDraft | undefined)?.contact || {}, undefined, true);
-  const draft = validateDocumentDraft(body.draft, contact, false), company = (await readSettings()).company, now = Date.now();
+  const draft = validateDocumentDraft(body.draft, contact, body.kind, false), company = (await readSettings()).company, now = Date.now();
   const automatic = body.autoNumber !== false;
   if (!automatic) await checkDocumentReference(body.kind, draft.number, id);
   try {
@@ -55,7 +56,7 @@ export async function createAdminDocument(body: Record<string, unknown>) {
   return summary(await findDocumentRequest(id));
 }
 export async function submitDocumentRequest(body: Record<string, unknown>, buyer: Buyer) {
-  if (!isDocumentKind(body.kind)) throw new ApiError("Choisissez le document demandé.");
+  if (!isBuyerDocumentKind(body.kind)) throw new ApiError("Choisissez le document demandé.");
   const idem = textField(body.idempotencyKey, "La référence", 100);
   const id = "TZ-R-" + (await hash("document-request:" + buyer.id + ":" + body.kind + ":" + idem)).slice(0, 12).toUpperCase();
   const existing = await db().prepare("SELECT * FROM document_requests WHERE id=? AND buyer_id=?").bind(id, buyer.id).first<Row>();
@@ -76,15 +77,17 @@ export async function submitDocumentRequest(body: Record<string, unknown>, buyer
   return summary(await findDocumentRequest(id, buyer.id));
 }
 function validRevision(value: unknown) { if (!Number.isSafeInteger(value) || Number(value) < 1) throw new ApiError("Actualisez la demande avant de l’enregistrer.", 409); return Number(value); }
-export function validateDocumentDraft(input: unknown, contact: DocumentContact, lockRecipient = true): DocumentDraft {
+export function validateDocumentDraft(input: unknown, contact: DocumentContact, kind: DocumentKind, lockRecipient = true): DocumentDraft {
   if (!input || typeof input !== "object" || Array.isArray(input)) throw new ApiError("Document invalide.");
   const data = input as Record<string, unknown>;
   const number = normalizeDocumentReference(textField(data.number, "Le numéro du document", 80));
   if (!parseDocumentReference(number)) throw new ApiError("Saisissez une référence au format TW 5/2026.");
   if (typeof data.date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(data.date) || !Number.isFinite(Date.parse(data.date)) || new Date(data.date).toISOString().slice(0, 10) !== data.date) throw new ApiError("Saisissez une date valide.");
   if (typeof data.taxRate !== "number" || !Number.isFinite(data.taxRate) || data.taxRate < 0 || data.taxRate > 100 || Math.abs(data.taxRate * 100 - Math.round(data.taxRate * 100)) > 1e-6) throw new ApiError("Taux de TVA invalide.");
-  if (!Array.isArray(data.items) || !data.items.length || data.items.length > 40) throw new ApiError("Ajoutez entre 1 et 40 lignes au document.");
-  const items = data.items.map(item => {
+  const statementDocument = isStatementDocument(kind);
+  const statement = statementDocument ? textField(data.statement, "Le contenu du document", 8000) : undefined;
+  if (!statementDocument && (!Array.isArray(data.items) || !data.items.length || data.items.length > 40)) throw new ApiError("Ajoutez entre 1 et 40 lignes au document.");
+  const items = statementDocument ? [] : (data.items as Record<string, unknown>[]).map(item => {
     if (!item || typeof item !== "object") throw new ApiError("Article invalide.");
     if (typeof item.quantity !== "number" || !Number.isFinite(item.quantity) || item.quantity <= 0 || item.quantity > 100000 || Math.abs(item.quantity * 1000 - Math.round(item.quantity * 1000)) > 1e-5) throw new ApiError("Quantité invalide (trois décimales maximum).");
     if (typeof item.unitPrice !== "number" || !Number.isFinite(item.unitPrice) || item.unitPrice < 0 || item.unitPrice > 1e8 || Math.abs(item.unitPrice * 100 - Math.round(item.unitPrice * 100)) > 1e-5) throw new ApiError("Prix unitaire invalide en dirhams marocains (MAD).");
@@ -92,12 +95,12 @@ export function validateDocumentDraft(input: unknown, contact: DocumentContact, 
   });
   const edited = data.contact && typeof data.contact === "object" ? contactFields(data.contact as Record<string, unknown>, undefined, true) : { ...contact, name: contact.maitreOuvrage, city: "", note: "" };
   if (lockRecipient && edited.email !== contact.email) throw new ApiError("Le document doit être envoyé à l’email enregistré dans la demande.");
-  const result = { number, date: data.date, place: "", bank: data.bank ? textField(data.bank, "La banque", 200) : "", rib: data.rib ? textField(data.rib, "Le RIB", 60) : "", taxRate: data.taxRate, items, contact: edited, note: "", authority: data.authority ? textField(data.authority, "L’administration", 1000) : "", tenderReference: data.tenderReference ? textField(data.tenderReference, "L’appel d’offres", 100) : "", marketReference: data.marketReference ? textField(data.marketReference, "Le marché", 100) : "" };
-  if (edited.procurementType === "marches" && (!result.authority || !result.tenderReference || !result.marketReference)) throw new ApiError("Renseignez l’administration, l’appel d’offres et le marché.");
+  const result = { number, date: data.date, place: "", bank: data.bank ? textField(data.bank, "La banque", 200) : "", rib: data.rib ? textField(data.rib, "Le RIB", 60) : "", taxRate: data.taxRate, items, contact: edited, note: "", ...(statementDocument ? { statement } : {}), authority: data.authority ? textField(data.authority, "L’administration", 1000) : "", tenderReference: data.tenderReference ? textField(data.tenderReference, "L’appel d’offres", 100) : "", marketReference: data.marketReference ? textField(data.marketReference, "Le marché", 100) : "" };
+  if (!statementDocument && edited.procurementType === "marches" && (!result.authority || !result.tenderReference || !result.marketReference)) throw new ApiError("Renseignez l’administration, l’appel d’offres et le marché.");
   if (documentTotals(result).total > 1e10) throw new ApiError("Le total du document est trop élevé."); return result;
 }
 export async function saveDocumentDraft(body: Record<string, unknown>) {
-  const row = await findDocumentRequest(body.id), draft = validateDocumentDraft(body.draft, snapshot(row).contact, !!row.buyer_id);
+  const row = await findDocumentRequest(body.id), draft = validateDocumentDraft(body.draft, snapshot(row).contact, row.kind, !!row.buyer_id);
   if (!(body.autoNumber === true && !row.document_number)) await checkDocumentReference(row.kind, draft.number, row.id);
   let changed;
   try {
@@ -111,12 +114,12 @@ export async function saveDocumentDraft(body: Record<string, unknown>) {
 export async function previewDocument(body: Record<string, unknown>) {
   if (!body.id) {
     if (!isDocumentKind(body.kind)) throw new ApiError("Choisissez le document à créer.");
-    const contact = contactFields((body.draft as DocumentDraft | undefined)?.contact || {}, undefined, true), draft = validateDocumentDraft(body.draft, contact, false), company = (await readSettings()).company, now = Date.now();
+    const contact = contactFields((body.draft as DocumentDraft | undefined)?.contact || {}, undefined, true), draft = validateDocumentDraft(body.draft, contact, body.kind, false), company = (await readSettings()).company, now = Date.now();
     const request: DocumentRequest = { id: "APERCU", kind: body.kind, origin: "admin", contact, draft, revision: 1, createdAt: now, updatedAt: now, status: "draft", hasPdf: false, locked: false, companyNotification: "not_requested", customerNotification: "not_requested", companyDelivery: null, customerDelivery: null };
     return createBusinessPdf(request, company, { requestId: request.id, kind: request.kind, draft, company, createdAt: now });
   }
   const row = await findDocumentRequest(body.id);
-  const draft = validateDocumentDraft(body.draft, snapshot(row).contact, !!row.buyer_id), company = (await readSettings()).company;
+  const draft = validateDocumentDraft(body.draft, snapshot(row).contact, row.kind, !!row.buyer_id), company = (await readSettings()).company;
   return createBusinessPdf(summary(row), company, { requestId: row.id, kind: row.kind, draft, company, createdAt: row.created_at });
 }
 export async function downloadDocument(id: unknown, buyerId?: string, receipt = false) {
@@ -134,7 +137,7 @@ export async function sendDocument(body: Record<string, unknown>) {
   if (row.send_status === "pending" && now - row.updated_at < 120000) throw new ApiError("Un envoi est déjà en cours. Actualisez dans un instant.", 409);
   let eventId = row.send_event, pdfKey = row.pdf_key, issued: IssuedDocument;
   if (!eventId) {
-    const company = (await readSettings()).company, draft = validateDocumentDraft(JSON.parse(row.draft), snapshot(row).contact, !!row.buyer_id);
+    const company = (await readSettings()).company, draft = validateDocumentDraft(JSON.parse(row.draft), snapshot(row).contact, row.kind, !!row.buyer_id);
     issued = { requestId: row.id, kind: row.kind, draft, company, createdAt: now };
     eventId = "TZ-R-" + (await hash("issued-document:" + row.id + ":" + row.revision)).slice(0, 12).toUpperCase();
     pdfKey = "documents/" + row.id + "/" + eventId + ".pdf";

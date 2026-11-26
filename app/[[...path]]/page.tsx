@@ -1,6 +1,6 @@
 import Portal from "@/app/portal";
 import { readSettings } from "@/lib/site-store";
-import { isDocumentKind } from "@/lib/document-types";
+import { isBuyerDocumentKind } from "@/lib/document-types";
 import { isExtraService } from "@/lib/buyer-services";
 import { notFound } from "next/navigation";
 
@@ -12,5 +12,5 @@ export default async function Page({ params, searchParams }: { params: Promise<{
   const screen = path.length === 2 && path[0] === "services" && isExtraService(path[1]) ? path[1] : pages[path.join("/")];
   if (!screen) notFound();
   const { mode, type } = await searchParams;
-  return <Portal initialSettings={await readSettings()} initialScreen={screen} initialDocumentKind={isDocumentKind(type)?type:null} initialAccountMode={mode === "connexion" ? "signin" : "signup"} />;
+  return <Portal initialSettings={await readSettings()} initialScreen={screen} initialDocumentKind={isBuyerDocumentKind(type)?type:null} initialAccountMode={mode === "connexion" ? "signin" : "signup"} />;
 }

@@ -5,7 +5,7 @@ import { TAWZALA_CROWN_PNG } from "@/lib/company-mark";
 import type { Company } from "@/lib/company";
 import { money } from "@/lib/catalog";
 import { procurementLabel } from "@/lib/procurement";
-import { documentLabel, documentTotals, amountInWords, type DocumentRequest, type IssuedDocument } from "@/lib/document-types";
+import { isStatementDocument, documentLabel, documentTotals, amountInWords, type DocumentRequest, type IssuedDocument } from "@/lib/document-types";
 import { documentFooterLayout, drawDocumentFooters } from "@/lib/document-footer";
 
 const bytes = (value: string) => Uint8Array.from(atob(value), c => c.charCodeAt(0));
@@ -114,6 +114,11 @@ export async function createBusinessPdf(request: DocumentRequest, company: Compa
   if (!issued) {
     section("Traitement de votre demande");
     paragraph("Votre demande de " + documentLabel(request.kind).toLowerCase() + " a bien été enregistrée. Le service administratif préparera le document et vous l’enverra par email.");
+  } else if (isStatementDocument(request.kind)) {
+    for (const line of (draft?.statement ?? "").split(/\r?\n/)) {
+      if (line.trim()) paragraph(line, 10.5);
+      else y -= 8;
+    }
   } else {
     const invoice = request.kind === "facture", xs = invoice ? [L, L + 28, L + 273, L + 317, L + 355, L + 439, R] : [L, L + 32, L + 369, L + 435, R];
     const labels = invoice ? ["N°", "Désignation des prestations", "Unité", "Qté", "PU HT\n(MAD)", "Total HT\n(MAD)"] : ["N°", "Désignation des prestations", "Unité", "Quantité"];
