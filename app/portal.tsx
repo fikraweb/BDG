@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import FurniturePreview from "@/app/furniture-preview";
 import { flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
 import { LockKeyhole, Eye, EyeOff, ShieldCheck, LogOut, Calculator, Clock, CheckCircle2, ChevronRight, Building2, UserRound, Mail, Phone, Loader2, Menu, Download, BadgePercent, Pause, Play } from "lucide-react";
@@ -131,6 +132,7 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
   <AccessStrip label={brandName} paused={welcomePaused}><Brand name={brandName}/></AccessStrip>
  </>:<button className="brand-link" onClick={()=>go(authenticated&&buyer?"hub":"access")} aria-label={brandName+" — Accueil"}><Brand name={brandName}/></button>}{!access&&<><nav className="desktop-nav" aria-label="Navigation principale">{navigation.map(([id,label])=><Tooltip key={id}><TooltipTrigger asChild><button className={(screen==="requests"?documentKind:screen)===id?"active":""} aria-label={label} aria-current={(screen==="requests"?documentKind:screen)===id?"page":undefined} onClick={()=>go(id)}><ServiceIcon id={id}/></button></TooltipTrigger><TooltipContent side="bottom" sideOffset={10}>{label}</TooltipContent></Tooltip>)}</nav><div className="header-actions"><button className="user-name account-trigger" onClick={()=>setAccountOpen(true)} disabled={!buyer||!hasAccount} aria-label="Ouvrir mon compte"><UserRound size={16}/><span>{buyer?.name.split(" ")[0]}</span></button><button className="icon-button logout-desktop" aria-label="Se déconnecter" onClick={logout} disabled={busy}><LogOut size={19}/></button><button className="icon-button mobile-toggle" aria-label="Ouvrir le menu" onClick={()=>setMenuOpen(true)}><Menu size={23}/></button></div></>}</header>
  {access?<main className={`access-layout access-blue access-emblem ${screen==="access"?"access-minimal":`access-registration access-registration-${accountMode}`}`}>
+  {screen==="access"&&<FurniturePreview/>}
   <section className="access-form-panel"><div className="access-card">
    {screen==="register"&&<>
     <h1>{accountMode==="signin"?"Connexion":buyer?"Activer mon compte":"Inscription"}</h1>
@@ -149,10 +151,7 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
     {error&&<p className="form-error" role="alert">{error}</p>}
     <button className="primary-button" disabled={busy||!ready}>{busy?<Loader2 className="spin" size={19}/>:<LockKeyhole size={17}/>}Entrer</button>
    </form>
-  <footer className="access-emblem-footer">
-   <span>© {new Date().getFullYear()} {brandName}</span>
-   <a href="https://commons.wikimedia.org/wiki/File:Coat_of_arms_of_Morocco_(simple).svg" target="_blank" rel="noreferrer">Crédits de l’emblème</a>
-  </footer>
+
    </>:<div className="account-entry">
  <Tabs value={accountMode} onValueChange={value=>{setAccountMode(value as "signup"|"signin");setError("");setAccountPasswordVisible(false);window.history.replaceState(null,"",value==="signin"?"/inscription?mode=connexion":"/inscription");}}>
   <TabsList className="account-tabs" aria-label="Inscription ou connexion">
@@ -192,6 +191,11 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
   <AccessStrip label="Bienvenue" paused={welcomePaused} onToggle={()=>setWelcomePaused(paused=>!paused)}>
    Bienvenue
   </AccessStrip>
+  {screen==="access"&&<footer className="access-emblem-footer">
+   <span>© {new Date().getFullYear()} {brandName}</span>
+   <a href="https://commons.wikimedia.org/wiki/File:Coat_of_arms_of_Morocco_(simple).svg" target="_blank" rel="noreferrer">Crédits de l’emblème</a>
+  </footer>}
+
  </main>:!ready||!buyer?<main className="page-width loading-page"><Skeleton className="h-12 w-72 mb-8"/><Skeleton className="h-72 w-full"/><p>Chargement de votre espace…</p>{error&&<p role="alert">{error}</p>}</main>:<><div className="session-strip"><span><ShieldCheck size={14}/>Espace acheteur public</span><span>Bienvenue, {buyer.name}</span></div>
  {screen==="hub"&&<main className="page-width hub-page compact-hub"><h1 className="sr-only">Services BDG</h1>
   <div className="service-tiles">{navigation.map(([id,label])=><button className={`service-tile service-tile-${id}`} key={id} onClick={()=>go(id)}><span className="tile-icon"><ServiceIcon id={id} size={100}/></span><span>{label}</span><ChevronRight size={16} className="tile-arrow"/></button>)}</div>
