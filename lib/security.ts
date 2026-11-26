@@ -8,10 +8,13 @@ type SecurityRow={value:string;revision:number};
 const ID="security-main";
 async function provisionAdmin(row:SecurityRow){
  const seed=config("ADMIN_BOOTSTRAP_REVISION"),password=config("ADMIN_BOOTSTRAP_PASSWORD"),email=config("ADMIN_BOOTSTRAP_EMAIL");
- if(!seed&&!password&&!email)return row;
- if(!/^[A-Za-z0-9_-]{8,100}$/.test(seed)||password.length<8||password.length>128)throw new Error("Admin access configuration unavailable");
+ // Bootstrap applies only as a complete bundle. An incomplete deployment
+ // continues to use the credentials already stored in D1.
+ if(!seed||!password||!email)return row;
+ if(!/^[A-Za-z0-9_-]{8,100}$/.test(seed))throw new Error("Admin access configuration unavailable");
  const marker="admin-bootstrap:"+seed;
  if(await db().prepare("SELECT id FROM site_settings WHERE id=?").bind(marker).first())return row;
+ if(password.length<8||password.length>128)throw new Error("Admin access configuration unavailable");
  const mutation=crypto.randomUUID(),next={...JSON.parse(row.value) as SecretSettings,adminEmail:emailField(email),adminPasswordHash:await encodePassword(password),mutation},now=Date.now();
  await db().batch([
   db().prepare("UPDATE site_settings SET value=?,revision=revision+1,updated_at=? WHERE id=? AND revision=? AND NOT EXISTS (SELECT 1 FROM site_settings WHERE id=?)").bind(JSON.stringify(next),now,ID,row.revision,marker),

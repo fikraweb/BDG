@@ -6,6 +6,8 @@ Private purchasing portal with a shared password access gate, buyer email/passwo
 
 Use `pnpm run build` for the build command. The build generates
 `dist/server/wrangler.json` for the `bdg` Worker with its `DB` binding.
+The generated configuration enables `keep_vars` so variables set in the
+Cloudflare dashboard survive Git deploys.
 For a new database, run the migrations before serving requests:
 
 ```sh
