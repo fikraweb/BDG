@@ -567,5 +567,4 @@
 .access-strip .brand { display: inline-flex; gap: 8px; align-items: center; vertical-align: middle; color: inherit; }
 .access-strip .brand-logo { width: 29px; height: 29px; }
 .access-strip .brand-word { font: inherit; }
-.access-card-logo { display: block; margin-inline: auto; object-fit: contain; }
 .admin-login-card > .brand-logo { margin-inline: auto; }

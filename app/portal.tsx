@@ -138,7 +138,6 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
    </>}
    {screen==="access"?<>
     <div className="access-card-title">
-     <img className="access-card-logo" src="/images/bdg-logo.webp" width={68} height={68} alt={brandName}/>
      <h1>Royaume du Maroc</h1>
     </div>
     <form className="access-form" onSubmit={login}>
