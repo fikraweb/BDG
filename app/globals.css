@@ -473,7 +473,7 @@
   opacity: .36;
 }
 
-.access-emblem.access-minimal .access-form-panel {
+.access-emblem .access-form-panel {
   order: 0;
   flex: 1;
   min-height: 0;
@@ -520,4 +520,35 @@
   .access-layout.access-emblem {
     min-height: calc(100dvh - var(--bdg-flag-height) - var(--access-strip-height));
   }
+}
+
+
+.access-registration .access-form-panel {
+  width: min(100%, 720px);
+  max-width: none;
+  align-items: center;
+  padding: clamp(16px, 4vw, 36px) 12px;
+}
+
+.access-registration .access-card {
+  width: 100%;
+  max-width: 620px;
+  padding: clamp(16px, 4vw, 32px);
+}
+
+.access-registration .access-brand { margin: 16px 0; }
+.access-registration .access-copyright { padding-top: 14px; color: #eee4cc; }
+.access-registration .steps { gap: 14px; }
+.access-registration .steps li { color: #e1e9de; }
+.access-registration .steps .current { color: #fff; }
+.access-registration .steps .current > span,
+.access-registration .account-tabs button[data-state="active"] { color: #221909; }
+.access-registration .lead,
+.access-registration .field-note,
+.access-registration .data-note,
+.access-registration .text-button { color: #e1e9de; }
+.access-registration .account-switch { color: #f1d79d; }
+
+@media (max-width: 640px) {
+  .access-registration .input-wrap input { font-size: 1rem; }
 }
