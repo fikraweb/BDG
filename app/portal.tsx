@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
-import { LockKeyhole, Eye, EyeOff, ShieldCheck, LogOut, Calculator, Check, Clock, CheckCircle2, ChevronRight, Building2, UserRound, Mail, Phone, Loader2, Menu, Download, BadgePercent, Pause, Play } from "lucide-react";
+import { LockKeyhole, Eye, EyeOff, ShieldCheck, LogOut, Calculator, Clock, CheckCircle2, ChevronRight, Building2, UserRound, Mail, Phone, Loader2, Menu, Download, BadgePercent, Pause, Play } from "lucide-react";
 import { initializeClientVisit, endClientVisit, finishClientPage, observeVisitNavigation, isInternalVisitExit, prepareAdminVisit, forgetClientContinuation } from "@/lib/client-visit";
 import { DOCUMENT_TYPES, isDocumentKind, type DocumentKind } from "@/lib/document-types";
 import DocumentRequests from "@/app/document-requests";
@@ -55,7 +55,6 @@ function RequestFields({buyer,compact=false,delivery=false,onCityChange}:{buyer:
   {delivery&&<><CityField name="deliveryCity" label="Ville de livraison" defaultValue={buyer?.city||""} onValueChange={onCityChange}/><Field label="Délai / date souhaité (facultatif)"><input name="deliveryDeadline" maxLength={120} placeholder="Ex. : 5 jours, ou une date"/></Field></>}
  </div>;
 }
-function Steps({step}:{step:number}) {return <ol className="steps" aria-label="Étapes d’accès">{["Accès","Inscription","Services"].map((s,i)=><li key={s} className={step===i+1?"current":step>i+1?"done":""}><span>{step>i+1?<Check size={13}/>:"0"+(i+1)}</span>{s}</li>)}</ol>;}
 
 function PriceBreakdown({quote,compact=false}:{quote:PriceQuote|null;compact?:boolean}) {
  return <div className={`price-breakdown${compact?" compact":""}`} aria-live="polite" aria-atomic="true">
@@ -130,11 +129,10 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
   <AccessStrip label="Drapeau du Maroc" paused={welcomePaused} flags/>
   <AccessStrip label={brandName} paused={welcomePaused}>{brandName}</AccessStrip>
  </>:<button className="brand-link" onClick={()=>go(authenticated&&buyer?"hub":"access")} aria-label={brandName+" — Accueil"}><Brand name={brandName}/></button>}{!access&&<><nav className="desktop-nav" aria-label="Navigation principale">{navigation.map(([id,label])=><Tooltip key={id}><TooltipTrigger asChild><button className={(screen==="requests"?documentKind:screen)===id?"active":""} aria-label={label} aria-current={(screen==="requests"?documentKind:screen)===id?"page":undefined} onClick={()=>go(id)}><ServiceIcon id={id}/></button></TooltipTrigger><TooltipContent side="bottom" sideOffset={10}>{label}</TooltipContent></Tooltip>)}</nav><div className="header-actions"><button className="user-name account-trigger" onClick={()=>setAccountOpen(true)} disabled={!buyer||!hasAccount} aria-label="Ouvrir mon compte"><UserRound size={16}/><span>{buyer?.name.split(" ")[0]}</span></button><button className="icon-button logout-desktop" aria-label="Se déconnecter" onClick={logout} disabled={busy}><LogOut size={19}/></button><button className="icon-button mobile-toggle" aria-label="Ouvrir le menu" onClick={()=>setMenuOpen(true)}><Menu size={23}/></button></div></>}</header>
- {access?<main className={`access-layout access-blue access-emblem ${screen==="access"?"access-minimal":"access-registration"}`}>
+ {access?<main className={`access-layout access-blue access-emblem ${screen==="access"?"access-minimal":`access-registration access-registration-${accountMode}`}`}>
   <section className="access-form-panel"><div className="access-card">
    {screen==="register"&&<>
-    <Steps step={2}/><div className="access-brand"><Brand large/></div><span className="eyebrow">ESPACE RÉSERVÉ</span>
-    <h1>Acheteur public</h1>
+    <h1>{accountMode==="signin"?"Connexion":buyer?"Activer mon compte":"Inscription"}</h1>
     <p className="lead">{accountMode==="signin"?"Retrouvez votre compte avec votre email et votre mot de passe.":buyer?"Vos coordonnées sont enregistrées. Choisissez votre mot de passe pour vos prochaines visites.":"Créez votre compte pour accéder aux services BDG."}</p>
    </>}
    {screen==="access"?<>
@@ -187,7 +185,6 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
   {accountMode==="signin"&&<p className="data-note">Inscrit auparavant sans mot de passe ? Activez votre compte depuis votre session existante, ou créez un compte avec un mot de passe.</p>}
   {error&&<p className="form-error" role="alert">{error}</p>}
   <button className="primary-button" disabled={busy||!ready}>{busy?<Loader2 size={18} className="spin"/>:<LockKeyhole size={17}/>} {accountMode==="signin"?"Se connecter":buyer?"Enregistrer mon mot de passe":"S’inscrire et continuer"}</button>
-  <button type="button" className="text-button account-switch" disabled={busy} onClick={()=>{setAccountMode(accountMode==="signup"?"signin":"signup");setError("");setAccountPasswordVisible(false);}}>{accountMode==="signup"?"Déjà inscrit ? Se connecter":"Première visite ? Créer un compte"}</button>
   <button type="button" className="text-button" onClick={leaveAccess} disabled={busy}>Revenir à l’accès</button>
  </form>
 </div>}</div>{screen==="register"&&<div className="access-copyright">© {new Date().getFullYear()} {brandName} <span>Portail des acheteurs publics</span></div>}</section>

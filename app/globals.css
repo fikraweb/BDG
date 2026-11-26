@@ -524,30 +524,40 @@
 
 
 .access-registration .access-form-panel {
-  width: min(100%, 720px);
-  max-width: none;
+  width: 100%;
   align-items: center;
-  padding: clamp(16px, 4vw, 36px) 12px;
+  padding: clamp(12px, 3vw, 24px) 14px;
 }
 
 .access-registration .access-card {
   width: 100%;
-  max-width: 620px;
-  padding: clamp(16px, 4vw, 32px);
+  max-width: 490px;
+  padding: clamp(14px, 3vw, 22px);
+  border: 1px solid #dfc88b75;
+  background: linear-gradient(145deg, #173b2ee8, #092b22e3);
 }
 
-.access-registration .access-brand { margin: 16px 0; }
-.access-registration .access-copyright { padding-top: 14px; color: #eee4cc; }
-.access-registration .steps { gap: 14px; }
-.access-registration .steps li { color: #e1e9de; }
-.access-registration .steps .current { color: #fff; }
-.access-registration .steps .current > span,
+.access-registration-signin .access-card { max-width: 360px; }
+
+.access-registration .access-card h1 {
+  margin: 0 0 4px;
+  color: #f1d79d;
+  font-size: clamp(1.3rem, 3vw, 1.55rem);
+}
+
+.access-registration .lead { font-size: .875rem; }
+.access-registration .account-entry { margin-top: 12px; }
+.access-registration .account-tabs { width: 100%; min-height: 36px; }
+.access-registration .account-tabs button { min-height: 30px; padding-block: 4px; }
 .access-registration .account-tabs button[data-state="active"] { color: #221909; }
+.access-registration .registration-form { margin-top: 12px; gap: 9px; }
+.access-registration .account-field-row { gap: 10px; }
+.access-registration .field { gap: 5px; }
+.access-registration .access-copyright { padding-top: 10px; color: #eee4cc; }
 .access-registration .lead,
 .access-registration .field-note,
 .access-registration .data-note,
 .access-registration .text-button { color: #e1e9de; }
-.access-registration .account-switch { color: #f1d79d; }
 
 @media (max-width: 640px) {
   .access-registration .input-wrap input { font-size: 1rem; }
