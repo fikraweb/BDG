@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Building2, BadgePercent, Save, Loader2, ShieldCheck, RefreshCw, Coins, FileStack, LayoutDashboard, MessagesSquare, LogOut } from "lucide-react";
+import { Building2, BadgePercent, Save, Loader2, ShieldCheck, RefreshCw, Coins, FileStack, LayoutDashboard, MessagesSquare, LogOut, Globe2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
@@ -31,7 +31,7 @@ const companyFields: { key: keyof Company; label: string; max: number; type?: st
   { key: "email", label: "Email de l’entreprise", max: 254, type: "email" }, { key: "rib", label: "RIB", max: 60 },
   { key: "taxeProfessionnelle", label: "N° TP · Taxe professionnelle", max: 40 }, { key: "cnss", label: "N° CNSS", max: 40 }, { key: "ice", label: "ICE", max: 40 },
 ];
-export default function Admin({ email,token,onSessionChange,onSessionExpired,onSignOut }: { email: string;token:string;onSessionChange:(value:{email:string;token:string})=>void;onSessionExpired:()=>void;onSignOut:()=>void }) {
+export default function Admin({ token,onSessionChange,onSessionExpired,onSignOut }: { token:string;onSessionChange:(value:{email:string;token:string})=>void;onSessionExpired:()=>void;onSignOut:()=>void }) {
   const [store, setStore] = useState<SiteStore|null>(null), [company, setCompany] = useState<Company>({ ...COMPANY }), [rate, setRate] = useState("5");
   const [tab, setTab] = useState<string>("overview");
   const [loading, setLoading] = useState(true), [busy, setBusy] = useState(false), [error, setError] = useState("");
@@ -72,8 +72,7 @@ export default function Admin({ email,token,onSessionChange,onSessionExpired,onS
     <header className="admin-header">
       <a className="admin-brand" href="/"><img className="brand-logo" src="/images/bdg-logo.webp" width={32} height={32} alt=""/><span>{BRAND_NAME}<small>Administration</small></span></a>
       <div className="admin-header-actions">
-        <span className="admin-account"><ShieldCheck size={16}/>{security?.adminEmail||email}</span>
-        <a className="secondary-button" href="/">Voir le site</a>
+        <a className="admin-site-link" href="/"><Globe2 size={19} aria-hidden="true"/>Voir le site</a>
         <button type="button" className="admin-header-signout" aria-label="Déconnexion admin" onClick={onSignOut}><LogOut size={18}/></button>
       </div>
     </header>

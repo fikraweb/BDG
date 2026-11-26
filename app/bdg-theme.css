@@ -171,7 +171,6 @@ body:has(.buyer-workspace, .admin-shell.bdg-themed) :is([data-slot="dialog-conte
 }
 .admin-dashboard .admin-brand small { font-size: .75rem; letter-spacing: .035em; }
 .admin-dashboard .admin-header-actions { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.admin-dashboard .admin-account { max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .admin-header-signout {
   display: grid;
   place-items: center;
@@ -249,7 +248,7 @@ body:has(.buyer-workspace, .admin-shell.bdg-themed) :is([data-slot="dialog-conte
 .admin-dashboard .admin-chart-track { height: 9px; background: #e6dfca; border-radius: 20px; overflow: hidden; }
 .admin-dashboard .admin-chart-track > div { height: 100%; background: #426d55; border-radius: inherit; }
 .admin-dashboard .admin-chart-track > [data-status="awaiting_transfer"] { background: #9b6f27; }
-.admin-dashboard .admin-chart-track > [data-status="pending"] { background: #426483; }
+.admin-dashboard .admin-chart-track > [data-status="pending"] { background: #6a8962; }
 .admin-dashboard .admin-chart-track > [data-status="failed"] { background: #984e44; }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -267,10 +266,69 @@ body:has(.buyer-workspace, .admin-shell.bdg-themed) :is([data-slot="dialog-conte
   .admin-dashboard .admin-section-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 560px) {
-  .admin-dashboard .admin-account { display: none; }
   .admin-dashboard .admin-title { gap: 8px; }
   .admin-dashboard .admin-title h1 { font-size: 1.3rem; overflow-wrap: anywhere; }
   .admin-dashboard .admin-title .secondary-button { flex-shrink: 0; }
   .admin-dashboard .admin-metrics { grid-template-columns: minmax(0, 1fr); }
   .admin-dashboard .admin-chart-bars li { grid-template-columns: minmax(0, 7rem) minmax(20px, 1fr) 2.5ch; }
 }
+
+
+.admin-dashboard, .admin-access.bdg-themed,
+body:has(.admin-dashboard) :is(.document-editor-dialog, .payout-dialog, .document-send-confirm) {
+  --navy: #173e30;
+  --ink: #19392e;
+  --ring: #4c7b5e;
+  --admin-muted: #4d6255;
+  --admin-line: #c5d4c7;
+  --admin-tint: #eaf2e8;
+}
+
+.admin-dashboard .admin-site-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 6px 12px;
+  border: 1px solid #d8ba7c70;
+  border-radius: 10px;
+  background: #edca8321;
+  color: #fff4dd;
+  white-space: nowrap;
+  font-size: .875rem;
+}
+.admin-dashboard .admin-site-link svg { flex-shrink: 0; color: #edca83; }
+.admin-dashboard .admin-site-link:hover { background: #edca8340; }
+.admin-dashboard .admin-site-link:focus-visible { outline: 2px solid #edca83; outline-offset: 3px; }
+
+.admin-dashboard :is(.admin-panel p, .admin-empty, .admin-help, .admin-fields .field small,
+  .document-heading-row p, .document-request-row p, .document-request-row small,
+  .payout-request-identity > strong, .payout-request-identity p, .payout-request-identity small,
+  .payout-request-amount small, .payout-request-amount span) { color: var(--admin-muted); }
+
+.admin-dashboard .payout-status:not(.payout-status-failed) { color: #356047; }
+.admin-dashboard :is(.admin-save, .admin-search, .document-request-row, .payout-request) { border-color: var(--admin-line); }
+.admin-dashboard .document-status:not(.available) { color: #29533e; background: var(--admin-tint); }
+.admin-dashboard .security-panels .admin-panel-heading > svg { color: #32684e; }
+.admin-dashboard .admin-rate-example { background: #173e30; }
+.admin-dashboard .admin-rate-example small { color: #d3e4d4; }
+.admin-dashboard :is(.admin-fields input, .admin-fields textarea, .admin-rate-field input, .admin-search) { color: var(--ink); }
+.admin-dashboard :is(.admin-fields input, .admin-fields textarea, .admin-rate-field input):focus,
+.admin-dashboard .admin-search:focus-within {
+  border-color: #4b795a;
+  box-shadow: 0 0 0 3px #4b795a30;
+}
+
+body:has(.admin-dashboard) .document-editor-dialog :is(.document-editor-line, .document-invoice-totals, .document-reference-editor) {
+  background: var(--admin-tint);
+  border-color: var(--admin-line);
+}
+body:has(.admin-dashboard) .document-editor-dialog :is(.document-reference-label, .document-reference-preview, .document-signature-preview, .document-signature-preview strong) { color: var(--ink); }
+body:has(.admin-dashboard) .document-editor-dialog .document-reference-prefix { background: var(--navy); color: #fff; }
+body:has(.admin-dashboard) .document-editor-dialog :is(.document-invoice-totals > div:last-child, .document-stamp-preview, .document-signature-preview, .document-company-seal) { border-color: var(--admin-line); }
+body:has(.admin-dashboard) :is(.document-editor-dialog, .payout-dialog) :is(.document-reference-divider, .field small) { color: var(--admin-muted); }
+body:has(.admin-dashboard) .document-editor-dialog .document-form-grid :is(input, select, textarea) {
+  color: var(--ink);
+  border-color: var(--admin-line);
+}
+body:has(.admin-dashboard) .document-editor-dialog .document-form-grid :is(input, select, textarea):focus { outline-color: var(--ring); }
