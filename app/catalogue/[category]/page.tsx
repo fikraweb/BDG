@@ -20,7 +20,7 @@ export default async function FurnitureCatalogue({ params, searchParams }: PageP
   if (!current) notFound();
   const { depuis } = await searchParams;
 
-  return <main className="furniture-catalogue">
+  return <main className="furniture-catalogue bdg-themed">
     <header className="furniture-catalogue-hero">
       <div className="furniture-catalogue-body">
         <CatalogueBackLink fromServices={depuis === "services"}/>

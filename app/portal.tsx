@@ -230,13 +230,13 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
    <a href="https://commons.wikimedia.org/wiki/File:Coat_of_arms_of_Morocco_(simple).svg" target="_blank" rel="noreferrer">Crédits de l’emblème</a>
   </footer>}
 
- </main>:!ready||!buyer?<main className="page-width loading-page"><Skeleton className="h-12 w-72 mb-8"/><Skeleton className="h-72 w-full"/><p>Chargement de votre espace…</p>{error&&<p role="alert">{error}</p>}</main>:<>
- {screen==="hub"&&<div className="hub-theme"><main className="page-width hub-page compact-hub"><h1 className="sr-only">Services BDG</h1>
+ </main>:<div className="bdg-themed buyer-workspace">{!ready||!buyer?<main className="page-width loading-page"><Skeleton className="h-12 w-72 mb-8"/><Skeleton className="h-72 w-full"/><p>Chargement de votre espace…</p>{error&&<p role="alert">{error}</p>}</main>:<>
+ {screen==="hub"&&<main className="page-width hub-page compact-hub"><h1 className="sr-only">Services BDG</h1>
   <RemiseTicker rate={remiseRate}/>
   <div className="service-tiles">{navigation.map(([id,label])=><button className={`service-tile service-tile-${id}`} key={id} onClick={()=>go(id)}><span className="tile-icon"><ServiceIcon id={id} size={100}/></span><span>{label}</span><ChevronRight size={16} className="tile-arrow"/></button>)}</div>
   <button type="button" className="hub-contact" onClick={()=>go("autres")} aria-label="Contacter BDG"><Mail size={21}/></button>
- </main></div>}
- {isExtraService(screen)&&<main className="page-width document-page">
+ </main>}
+ {isExtraService(screen)&&<main key={screen} className="page-width document-page">
   <button className="breadcrumb" onClick={()=>go("hub")}>Services<ChevronRight size={15}/><span>{extraServices[screen]}</span></button>
   <div className="section-heading"><h1>{extraServices[screen]}</h1><div className="section-icon"><ServiceIcon id={screen} size={48}/></div></div>
   <BuyerService service={screen} company={store.settings.company}/>
@@ -262,7 +262,7 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
    </aside>
   </form>
  </main>}
- <footer className="site-footer page-width"><Brand name={brandName}/><div className="footer-copyright"><span>© {new Date().getFullYear()} {brandName}</span>{screen==="hub"&&<a className="hub-admin-access" href="/admin" onClick={prepareAdminVisit} aria-label="Espace admin" title="Espace admin"><ShieldCheck size={12}/></a>}</div><button className="text-button" onClick={logout} disabled={busy}><LogOut size={15}/>Se déconnecter</button></footer></>}
+ <footer className="site-footer page-width"><Brand name={brandName}/><div className="footer-copyright"><span>© {new Date().getFullYear()} {brandName}</span>{screen==="hub"&&<a className="hub-admin-access" href="/admin" onClick={prepareAdminVisit} aria-label="Espace admin" title="Espace admin"><ShieldCheck size={12}/></a>}</div><button className="text-button" onClick={logout} disabled={busy}><LogOut size={15}/>Se déconnecter</button></footer></>}</div>}
  {buyer&&hasAccount&&<AccountPanel open={accountOpen} onOpenChange={setAccountOpen} buyer={buyer} onChangePassword={async values=>{const epoch=authEpoch.current;const d=await api("account-password",values);if(epoch!==authEpoch.current)return;if(d.buyer)setBuyer(d.buyer);setHasAccount(!!d.hasAccount);}}/>}
  <Sheet open={menuOpen} onOpenChange={setMenuOpen}><SheetContent className="mobile-sheet"><SheetTitle><Brand name={brandName}/></SheetTitle><SheetDescription>Votre espace acheteur public</SheetDescription><nav>{navigation.map(([id,label])=><button key={id} aria-label={label} title={label} onClick={()=>go(id)}><ServiceIcon id={id} size={40}/></button>)}<button onClick={()=>{setMenuOpen(false);logout();}} disabled={busy}><LogOut size={18}/>Se déconnecter</button></nav></SheetContent></Sheet>
  <Dialog open={!!receipt} onOpenChange={o=>!o&&setReceipt(null)}><DialogContent className="receipt-dialog"><div className="receipt-icon"><CheckCircle2 size={33}/></div><DialogTitle>Votre demande est enregistrée.</DialogTitle><DialogDescription>{receipt?.customerNotification==="sent"?"Un email de confirmation avec les informations de votre demande et le PDF a été envoyé à votre email de contact.":"Votre demande est enregistrée. L’envoi de votre confirmation par email n’a pas encore été confirmé. Vous pouvez télécharger votre PDF ici."}</DialogDescription><div className="receipt-reference"><span>Référence de votre demande</span><strong>{receipt?.orderId}</strong></div>{receipt?.total!==undefined&&<div className="receipt-total"><span>Remise d’achat enregistrée</span><strong>{money(receipt.discount||0)}</strong><small>Prix après remise : {money(receipt.total)}</small></div>}{receipt&&<p className="receipt-deadline">Le versement de votre remise d’achat est prévu sous 24 heures via le service choisi.</p>}{receipt?.pdfUrl&&<a className="primary-button pdf-download" href={receipt.pdfUrl} download><Download size={18}/>Télécharger le PDF</a>}<button className="secondary-button" onClick={()=>setReceipt(null)}>Continuer</button></DialogContent></Dialog>

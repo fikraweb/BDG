@@ -44,7 +44,7 @@ export default function Admin({ email,token,onSessionChange,onSessionExpired }: 
   const sampleRate = Number(rate.replace(",", "."));
   const example = Number.isFinite(sampleRate) && sampleRate >= 0 && sampleRate <= 100 ? calculateRemise(1000, sampleRate) : null;
   const isLocked = busy || loading;
-  return <div className="admin-shell"><Toaster position="top-center"/>
+  return <div className="admin-shell bdg-themed"><Toaster position="top-center"/>
     <header className="admin-header"><a className="admin-brand" href="/"><img className="brand-logo" src="/images/bdg-logo.webp" width={44} height={44} alt=""/><span>{BRAND_NAME}<small>ESPACE ADMIN</small></span></a><div><span className="admin-account"><ShieldCheck size={16}/>{security?.adminEmail||email}</span><a className="secondary-button" href="/">Voir le site</a></div></header>
     <main className="admin-main"><div className="admin-title"><div><span className="eyebrow">ADMINISTRATION</span><h1>Gérer votre site<span>.</span></h1></div><button className="secondary-button" onClick={()=>void load()} disabled={isLocked}><RefreshCw size={16}/>Actualiser</button></div>
     <Tabs value={tab} onValueChange={value => { setTab(value); setError(""); }}><TabsList className="admin-tabs admin-side-menu" variant="line"><TabsTrigger value="documents"><FileStack size={17}/>Demandes</TabsTrigger><TabsTrigger value="company"><Building2 size={18}/>Entreprise</TabsTrigger><TabsTrigger value="remise"><BadgePercent size={18}/>Remise</TabsTrigger><TabsTrigger value="payouts"><Coins size={18}/>Versements</TabsTrigger><TabsTrigger value="security"><ShieldCheck size={18}/>Accès</TabsTrigger><TabsTrigger value="service-requests">Demandes de services</TabsTrigger></TabsList></Tabs>

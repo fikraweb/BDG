@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { BRAND_NAME } from "@/lib/company";
 import "./globals.css";
+import "./bdg-theme.css";
 
 export const metadata: Metadata = {
   title: `${BRAND_NAME} | Acheteur public`,

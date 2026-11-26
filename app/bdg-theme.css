@@ -1,0 +1,136 @@
+/* Shared backdrop and surfaces for the buyer workspace, catalogue and administration. */
+.bdg-themed {
+  --bdg-cream: #fff4dd;
+  --bdg-soft-text: #e6dfc9;
+  --bdg-gold: #edca83;
+  --bdg-dark-ink: #19392e;
+  --bdg-paper: #fff8e9f5;
+  --bdg-panel-edge: #e3c18482;
+  --bdg-control-edge: #b7ae93;
+  --bdg-ease: cubic-bezier(.16, 1, .3, 1);
+  position: relative;
+  isolation: isolate;
+  color: var(--bdg-cream);
+  background: var(--bdg-backdrop);
+}
+
+.bdg-themed::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background: var(--bdg-ornament) 0 0 / 118px;
+  mask-image: var(--bdg-ornament-mask);
+  opacity: .36;
+}
+
+.buyer-workspace { min-height: calc(100svh - 74px); }
+.buyer-workspace :is(.section-heading h1, .section-heading h1 span) { color: var(--bdg-cream); }
+.buyer-workspace :is(.breadcrumb, .breadcrumb span, .section-heading p, .loading-page > p) { color: var(--bdg-soft-text); }
+.buyer-workspace .section-heading .section-icon {
+  background: #e1b96925;
+  border-color: var(--bdg-panel-edge);
+  color: var(--bdg-gold);
+}
+.buyer-workspace .site-footer { color: var(--bdg-soft-text); border-top-color: var(--bdg-panel-edge); }
+.buyer-workspace .site-footer .brand,
+.buyer-workspace .hub-admin-access { color: var(--bdg-cream); }
+
+.bdg-themed :is(.form-section, .document-history, .admin-login-card, .admin-main .admin-panel, .furniture-preview-photo) {
+  background: var(--bdg-paper);
+  border: 1px solid var(--bdg-panel-edge);
+  color: var(--bdg-dark-ink);
+  box-shadow: 0 8px 26px #041b1330;
+}
+
+.bdg-themed :is(.form-section, .document-history, .admin-panel, .admin-login-card) :is(h2, h3, .field) {
+  color: var(--bdg-dark-ink);
+}
+.bdg-themed :is(.form-section, .document-history, .admin-panel, .admin-login-card) :is(.field-note, .admin-help, .document-list-note) {
+  color: #47574d;
+}
+
+.bdg-themed :is(.form-section, .admin-panel, .admin-login-card) :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
+  caret-color: #27604a;
+}
+.bdg-themed :is(.form-section, .admin-panel, .admin-login-card) :is(.input-wrap, .field > input, select, textarea) {
+  border-color: var(--bdg-control-edge);
+  background-color: #fffdf8;
+}
+.bdg-themed :is(.form-section, .admin-panel, .admin-login-card) :is(.input-wrap:focus-within, .field > input:focus, select:focus, textarea:focus) {
+  border-color: #367255;
+  box-shadow: 0 0 0 3px #36725535;
+}
+
+.bdg-themed .primary-button {
+  background: linear-gradient(115deg, #dfb66a, #f1d79a);
+  border-color: #ad873f;
+  color: #292211;
+}
+.bdg-themed .primary-button:hover:not(:disabled) { background: #f3dba5; }
+.bdg-themed .secondary-button { border-color: #b9a984; color: var(--bdg-dark-ink); }
+.bdg-themed :is(.primary-button, .secondary-button, .breadcrumb, .admin-return, .furniture-catalogue-back):focus-visible {
+  outline: 2px solid #397459;
+  outline-offset: 3px;
+}
+.bdg-themed :is(.breadcrumb, .admin-return, .furniture-catalogue-back):focus-visible { outline-color: var(--bdg-gold); }
+
+.buyer-workspace .calculation-result {
+  background: linear-gradient(150deg, #183c31f2, #092b24f2);
+  border: 1px solid var(--bdg-panel-edge);
+}
+.buyer-workspace .calculation-result :is(.result-heading, .quote-final > strong, .price-breakdown dd) { color: var(--bdg-gold); }
+.buyer-workspace .calculation-result :is(.quote-final > span, .price-breakdown dl > div) { color: var(--bdg-soft-text); }
+
+.admin-shell.bdg-themed .admin-header {
+  background: linear-gradient(115deg, #dfbb6b32, #d3a65414), #092b23e8;
+  border-bottom: 1px solid var(--bdg-panel-edge);
+}
+.admin-shell.bdg-themed :is(.admin-title h1, .admin-header .admin-brand, .admin-account, .admin-loading) { color: var(--bdg-cream); }
+.admin-shell.bdg-themed .admin-title :is(.eyebrow, h1 span) { color: var(--bdg-gold); }
+.admin-shell.bdg-themed .admin-side-menu {
+  background: #0a2c23f5;
+  border: 1px solid var(--bdg-panel-edge);
+}
+.admin-shell.bdg-themed .admin-side-menu [role="tab"] { color: var(--bdg-cream); }
+.admin-shell.bdg-themed .admin-side-menu [role="tab"]:is([data-state="active"], [data-active]) {
+  color: var(--bdg-dark-ink);
+  background: var(--bdg-gold);
+}
+.admin-shell.bdg-themed .admin-side-menu [role="tab"]:focus-visible { outline: 2px solid var(--bdg-gold); }
+.admin-shell.bdg-themed :is(.admin-rate-example, .payout-request, .document-request-row) { border-color: var(--bdg-control-edge); }
+.admin-access.bdg-themed .admin-login-card :is(h1, .admin-return) { color: var(--bdg-dark-ink); }
+.admin-shell.bdg-themed + .admin-signout { background: #193e32; border-color: #e3c18482; color: #fff4dd; }
+
+body:has(.buyer-workspace, .admin-shell.bdg-themed) :is([data-slot="dialog-content"], [data-slot="sheet-content"]) {
+  background: #fff8e9;
+  color: #19392e;
+  border-color: #c8a561;
+}
+
+.furniture-catalogue.bdg-themed .furniture-catalogue-hero { border-bottom-color: var(--bdg-panel-edge); }
+.furniture-catalogue.bdg-themed p { color: var(--bdg-soft-text); }
+.furniture-catalogue.bdg-themed .furniture-preview-photo figcaption { border-top-color: #dec79e; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .buyer-workspace > main,
+  .admin-access.bdg-themed .admin-login-card,
+  .admin-shell.bdg-themed .admin-main > .admin-panel,
+  .furniture-catalogue.bdg-themed .furniture-catalogue-hero .furniture-catalogue-body {
+    animation: bdg-content-arrive 240ms var(--bdg-ease);
+  }
+  .bdg-themed :is(.primary-button, .secondary-button, .furniture-catalogue-back) {
+    transition: transform 150ms var(--bdg-ease), background-color 150ms ease, border-color 150ms ease;
+  }
+  .bdg-themed :is(.primary-button, .secondary-button, .furniture-catalogue-back):active:not(:disabled) {
+    transform: translateY(1px) scale(.985);
+  }
+  .furniture-catalogue.bdg-themed .furniture-preview-photo img { transition: transform 320ms var(--bdg-ease); }
+  .furniture-catalogue.bdg-themed .furniture-preview-photo:hover img { transform: scale(1.025); }
+}
+
+@keyframes bdg-content-arrive {
+  from { opacity: .8; transform: translateY(5px); }
+  to { opacity: 1; transform: none; }
+}
