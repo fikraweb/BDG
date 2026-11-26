@@ -693,23 +693,13 @@
 }
 
 
-body:has(.hub-header) { background: #0d3928; }
 .site-header.hub-header {
-  color: #fff3d8;
-  background: linear-gradient(115deg, #d8a9573d, #f5d48e24);
-  border-bottom-color: #e3b97482;
-  backdrop-filter: blur(14px);
+  background: #fff;
+  border-bottom-color: #e4eaf0;
 }
-.hub-header :is(.brand, .icon-button, .account-trigger) { color: inherit; }
-.hub-header .desktop-nav button:is(:hover, :focus-visible, .active),
-.hub-header .header-actions button:hover {
-  background: #f5d48e29;
-  border-color: #e3b97482;
-}
-.hub-header + .session-strip {
-  color: #fff3d8;
-  background: #d8a95724;
-  border-bottom-color: #e3b97447;
+.hub-header .desktop-nav button:is(:hover, :focus-visible, .active) {
+  background: #eef4f2;
+  border-color: #d9e7e1;
 }
 .compact-hub .service-tile {
   color: #fff5de;
@@ -727,8 +717,8 @@ body:has(.hub-header) { background: #0d3928; }
   border-color: #f2d08a;
   background: linear-gradient(145deg, #eac37355, #bd873838);
 }
-.compact-hub .service-tile:focus-visible,
-.hub-header button:focus-visible { outline: 2px solid #f5d48e; outline-offset: 3px; }
+.compact-hub .service-tile:focus-visible { outline: 2px solid #f5d48e; outline-offset: 3px; }
+.hub-header button:focus-visible { outline: 2px solid #377258; outline-offset: 2px; }
 .compact-hub .service-tile .tile-icon {
   background: radial-gradient(ellipse at 50% 38%, #fbfdfc, #e6eef8 82%);
 }
@@ -767,3 +757,49 @@ body:has(.hub-header) { background: #0d3928; }
 .buyer-service-form dl > div { display: grid; grid-template-columns: minmax(7rem, 30%) 1fr; gap: 12px; padding-block: 8px; }
 .buyer-service-form dt { font-weight: 650; }
 .buyer-service-message { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+
+.remise-ticker {
+  margin-bottom: 24px;
+  overflow: hidden;
+  border: 1px solid #dbbf8180;
+  border-radius: 18px;
+  background: #092820b5;
+  backdrop-filter: blur(6px);
+  color: #fff5de;
+  box-shadow: 0 8px 24px #041b1338;
+}
+.remise-ticker-header,
+.remise-ticker-rate { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; }
+.remise-ticker-header { justify-content: space-between; padding: 12px 16px; }
+.remise-ticker-rate h2 { margin: 0; font-size: 1rem; }
+.remise-ticker-rate strong { color: #9cf3cf; font-size: 1.1rem; }
+.remise-ticker-rate span, .remise-ticker p { font-size: .875rem; color: #ebecdf; }
+.remise-ticker-toggle {
+  padding: 7px 14px;
+  border: 1px solid #d9c18d8c;
+  border-radius: 9px;
+  background: #fff4d513;
+  color: #fff5de;
+  font-size: .875rem;
+}
+.remise-ticker-toggle:hover { background: #fff4d52c; }
+.remise-ticker-toggle:focus-visible { outline: 2px solid #f5d48e; outline-offset: 2px; }
+.remise-ticker-window { overflow: hidden; border-block: 1px solid #d9c18d3b; }
+.remise-ticker-track { display: flex; width: max-content; animation: access-strip-scroll 24s linear infinite; }
+.remise-ticker[data-paused="true"] .remise-ticker-track { animation-play-state: paused; }
+.remise-ticker-group { display: flex; align-items: center; justify-content: space-around; min-width: max(100vw, 50rem); padding: 12px 16px; gap: 18px; }
+.remise-ticker-example { display: flex; align-items: center; gap: 10px; color: #ffb3b6; }
+.remise-ticker-example[data-rising="true"] { color: #9cf3cf; }
+.remise-ticker-example strong { display: flex; align-items: center; gap: 4px; font-size: 1.15rem; white-space: nowrap; }
+.remise-ticker-example small { font-size: .75rem; color: #ebecdf; }
+.remise-ticker p { margin: 0; padding: 10px 16px; }
+
+@media (max-width: 560px) {
+  .remise-ticker-rate { flex: 1; }
+  .remise-ticker-rate span { flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .remise-ticker-window, .remise-ticker-toggle, .remise-ticker p { display: none; }
+  .remise-ticker-track { animation: none; }
+}
