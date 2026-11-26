@@ -685,18 +685,23 @@
   border-color: #b79b64;
   background: #f3f7fa;
 }
-.service-outline-icon { display: block; flex-shrink: 0; color: #193f52; }
 .compact-hub .service-tile .tile-icon {
-  background: radial-gradient(ellipse at 50% 38%, #fbfdfc, #e1ecef 82%);
+  background: radial-gradient(ellipse at 50% 38%, #fbfdfc, #e6eef8 82%);
+}
+.compact-hub :is(.service-tile-remise, .service-tile-caution, .service-tile-references) .tile-icon {
+  background: radial-gradient(ellipse at 50% 38%, #fffdf5, #f2e9cc 82%);
+}
+.compact-hub .service-tile-moroccan .tile-icon {
+  background: radial-gradient(ellipse at 50% 38%, #195841, #092b23 82%);
+}
+.compact-hub :is(.service-tile-echanges, .service-tile-autres) .tile-icon {
+  background: radial-gradient(ellipse at 50% 38%, #f9fffd, #dbeee9 82%);
 }
 .site-header .header-actions { margin-inline-start: auto; }
 .site-header .header-actions .brand-link { margin-inline-start: 6px; }
 .site-header .header-actions .brand { gap: 7px; white-space: nowrap; }
 .site-header .header-actions .brand-word { font-size: 1rem; }
 
-@media (max-width: 760px) {
-  .compact-hub .service-outline-icon { width: 40px; height: 40px; }
-}
 .hub-contact {
   position: fixed;
   right: 20px;

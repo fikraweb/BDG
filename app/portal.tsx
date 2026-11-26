@@ -5,7 +5,7 @@ import { extraServices, isExtraService } from "@/lib/buyer-services";
 import FurniturePreview from "@/app/furniture-preview";
 import { flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
-import { LockKeyhole, Eye, EyeOff, ShieldCheck, LogOut, Calculator, Clock, CheckCircle2, ChevronRight, Building2, UserRound, Mail, Phone, Loader2, Menu, Download, BadgePercent, Pause, Play, FileCheck2, Scale, MessagesSquare, BriefcaseBusiness, Armchair, Table2, ReceiptText, Truck, PackageCheck } from "lucide-react";
+import { LockKeyhole, Eye, EyeOff, ShieldCheck, LogOut, Calculator, Clock, CheckCircle2, ChevronRight, Building2, UserRound, Mail, Phone, Loader2, Menu, Download, BadgePercent, Pause, Play } from "lucide-react";
 import { initializeClientVisit, endClientVisit, finishClientPage, isInternalVisitExit, prepareAdminVisit, forgetClientContinuation } from "@/lib/client-visit";
 import { DOCUMENT_TYPES, isDocumentKind, type DocumentKind } from "@/lib/document-types";
 import DocumentRequests from "@/app/document-requests";
@@ -34,22 +34,22 @@ const navigation = [
  ["echantillons", "Demande de bon de livraison des échantillons"],
  ...Object.entries(extraServices),
 ];
-const serviceIcons = {
- remise: BadgePercent,
- imported: Table2,
- moroccan: Armchair,
- facture: ReceiptText,
- livraison: Truck,
- echantillons: PackageCheck,
- caution: ShieldCheck,
- references: FileCheck2,
- reglementation: Scale,
- echanges: MessagesSquare,
- autres: BriefcaseBusiness,
+const serviceIcons: Record<string, string> = {
+ remise: "remise-mark",
+ imported: "imported",
+ moroccan: "moroccan-chair",
+ facture: "facture-mark",
+ livraison: "livraison-mark",
+ echantillons: "echantillons-mark",
+ caution: "caution",
+ references: "references",
+ reglementation: "reglementation",
+ echanges: "echanges",
+ autres: "autres",
 };
 function ServiceIcon({id,size=40}:{id:string;size?:number}) {
- const Icon = Object.hasOwn(serviceIcons, id) ? serviceIcons[id as keyof typeof serviceIcons] : FileCheck2;
- return <Icon className="service-outline-icon" size={Math.round(size * .56)} strokeWidth={1.65} aria-hidden="true"/>;
+ const icon = serviceIcons[id] ?? serviceIcons.facture;
+ return <img className="service-asset-icon" src={`/images/service-${icon}.webp`} width={size} height={size} alt="" aria-hidden="true" style={{width:size,height:size}}/>;
 }
 const paths: Record<string,string> = {access:"/",register:"/inscription",hub:"/marches-publics",remise:"/remise",requests:"/demandes",facture:"/demandes?type=facture",livraison:"/demandes?type=livraison",echantillons:"/demandes?type=echantillons",imported:"/catalogue/bureau",moroccan:"/catalogue/maroc",...Object.fromEntries(Object.keys(extraServices).map(id=>[id,`/services/${id}`]))};
 async function api(action:string,data:Record<string,unknown>={}) {await initializeClientVisit();const r=await fetch("/api/tawzala",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,...data})});const result=await r.json() as ApiReply;if(!r.ok)throw Object.assign(new Error(result.error||"La demande n’a pas pu être enregistrée."),{status:r.status});return result;}
