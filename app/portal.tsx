@@ -223,10 +223,10 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
   </footer>}
 
  </main>:!ready||!buyer?<main className="page-width loading-page"><Skeleton className="h-12 w-72 mb-8"/><Skeleton className="h-72 w-full"/><p>Chargement de votre espace…</p>{error&&<p role="alert">{error}</p>}</main>:<><div className="session-strip"><span><ShieldCheck size={14}/>Espace acheteur public</span><span>Bienvenue, {buyer.name}</span></div>
- {screen==="hub"&&<main className="page-width hub-page compact-hub"><h1 className="sr-only">Services BDG</h1>
+ {screen==="hub"&&<div className="hub-theme"><main className="page-width hub-page compact-hub"><h1 className="sr-only">Services BDG</h1>
   <div className="service-tiles">{navigation.map(([id,label])=><button className={`service-tile service-tile-${id}`} key={id} onClick={()=>go(id)}><span className="tile-icon"><ServiceIcon id={id} size={100}/></span><span>{label}</span><ChevronRight size={16} className="tile-arrow"/></button>)}</div>
   <button type="button" className="hub-contact" onClick={()=>go("autres")} aria-label="Contacter BDG"><Mail size={21}/></button>
- </main>}
+ </main></div>}
  {isExtraService(screen)&&<main className="page-width document-page">
   <button className="breadcrumb" onClick={()=>go("hub")}>Services<ChevronRight size={15}/><span>{extraServices[screen]}</span></button>
   <div className="section-heading"><h1>{extraServices[screen]}</h1><div className="section-icon"><ServiceIcon id={screen} size={48}/></div></div>

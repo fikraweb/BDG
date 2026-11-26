@@ -446,11 +446,15 @@
     url("/images/morocco-flag.svg") 0 0 / auto 100% repeat-x;
 }
 
+.access-layout.access-emblem,
+.hub-theme {
+  background: radial-gradient(ellipse at 50% 46%, #326143, #0d3928 46%, #06281e 80%);
+}
+
 .access-layout.access-emblem {
   position: relative;
   isolation: isolate;
   min-height: calc(100svh - var(--bdg-flag-height) - var(--access-strip-height));
-  background: radial-gradient(ellipse at 50% 46%, #326143, #0d3928 46%, #06281e 80%);
 }
 
 .access-layout.access-emblem::before,
@@ -466,7 +470,20 @@
   background: url("/images/morocco-emblem.svg") center / auto min(104%, 118vw, 740px) no-repeat;
 }
 
-.access-layout.access-emblem::after {
+.hub-theme {
+  position: relative;
+  isolation: isolate;
+}
+
+.hub-theme::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.access-layout.access-emblem::after,
+.hub-theme::after {
   z-index: -2;
   background: url("/images/bdg-ornament.svg") 0 0 / 118px;
   mask-image: radial-gradient(ellipse at bottom left, #000 0%, transparent 40%), radial-gradient(ellipse at top right, #000 0%, transparent 40%);
