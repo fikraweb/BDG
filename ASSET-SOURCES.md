@@ -312,3 +312,8 @@ The two TAWZALA collections use indicative demonstration configurations and pric
 - `service-imported-cinematic.png`: original generated 3D illustration of a walnut executive desk and navy office chair.
 - `service-moroccan-cinematic.png`: original generated 3D illustration of Moroccan wood office furniture with navy/turquoise zellij inlay.
 - Built-in image generation, one request per asset in a parallel batch, no variants. Matching navy/gold/ivory palette, transparent backgrounds and cinematic studio lighting. Original supplied icons remain preserved.
+
+
+## BDG furniture preview
+
+The three externally hosted photos in the China category come from Sunon: [panel systems](https://www.sunonglobal.com/product-category/products/panel-space-division/panel-system/), [flexible office furniture](https://www.isunon.com/health/detail/581.html), and [UP1 desks](https://www.isunon.com/product/detail/151.html).

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { money } from "@/lib/catalog";
 import { furnitureCategories, type PreviewPhoto } from "@/lib/furniture-preview";
 
 function FurniturePhoto({ photo }: { photo: PreviewPhoto }) {
@@ -11,12 +12,7 @@ function FurniturePhoto({ photo }: { photo: PreviewPhoto }) {
 
   return <figure className="furniture-preview-photo">
     {displayed && <img src={displayed.image} alt={displayed.label} loading="lazy" onError={() => setFailed(true)}/>}
-    <figcaption>
-      <strong>{displayed?.label ?? photo.label}</strong>
-      {failed && displayed && <span> · Illustration de remplacement</span>}
-      {" · "}
-      <a href={(displayed ?? photo).source} target="_blank" rel="noreferrer">{(displayed ?? photo).provider}</a>
-    </figcaption>
+    {displayed && <figcaption>{money(displayed.price)}</figcaption>}
   </figure>;
 }
 

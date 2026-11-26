@@ -615,39 +615,62 @@
 }
 .furniture-preview-photo img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
 .furniture-preview-photo figcaption { padding: 7px 9px; font-size: .875rem; }
-.furniture-preview-photo a { text-decoration: underline; }
 
 
 .furniture-catalogue {
   min-height: 100svh;
-  background: radial-gradient(ellipse at top, #215741, #06281e 75%);
-  color: #f7ead3;
+  background: #f5f2eb;
+  color: #20332b;
+}
+
+.furniture-catalogue-hero {
+  background:
+    linear-gradient(90deg, #09271fee, #09271f77),
+    url("/images/hero-office.webp") center 48% / cover no-repeat;
+  color: #fff;
+  border-bottom: 3px solid #d4b779;
 }
 
 .furniture-catalogue-body {
   width: min(100%, 1140px);
   margin-inline: auto;
-  padding: clamp(22px, 5vw, 56px) 16px;
+  padding: clamp(20px, 4vw, 44px) 16px;
 }
 
 .furniture-catalogue h1 {
-  margin: 22px 0 8px;
-  color: #f1d79d;
-  font: 700 clamp(1.65rem, 4vw, 2.6rem)/1.2 Georgia, serif;
+  margin: 20px 0 0;
+  color: #ffe5ad;
+  font: 700 clamp(1.65rem, 4vw, 2.7rem)/1.2 Georgia, serif;
 }
 
-.furniture-catalogue p { margin: 0 0 24px; }
+.furniture-catalogue p { margin: 0 0 18px; color: #47574f; font-size: .875rem; }
 .furniture-catalogue-back {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   padding: 8px 12px;
   border: 1px solid #d4b77975;
   border-radius: 8px;
-  color: #f1d79d;
+  background: #09271fbd;
+  color: #ffe5ad;
 }
-.furniture-catalogue-back:hover { background: #d4b77925; }
+.furniture-catalogue-back:hover { background: #143d30; }
 .furniture-catalogue .furniture-preview-photos {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
-  gap: 16px;
+  gap: clamp(14px, 2vw, 24px);
 }
-.furniture-catalogue .furniture-preview-photo { background: #0b3227; }
-.furniture-catalogue .furniture-preview-photo figcaption { padding: 12px; }
+.furniture-catalogue .furniture-preview-photo {
+  background: #fff;
+  border: 1px solid #ddd7ca;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px #21322a0f;
+}
+.furniture-catalogue .furniture-preview-photo img { aspect-ratio: 4 / 3; background: #eeeae2; }
+.furniture-catalogue .furniture-preview-photo figcaption {
+  padding: 14px 16px;
+  text-align: right;
+  border-top: 1px solid #eeeae2;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}

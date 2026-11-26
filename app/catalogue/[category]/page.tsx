@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import { FurnitureGallery } from "@/app/furniture-preview";
 import { furnitureCategories } from "@/lib/furniture-preview";
@@ -21,10 +21,14 @@ export default async function FurnitureCatalogue({ params }: PageProps) {
   if (!current) notFound();
 
   return <main className="furniture-catalogue">
+    <header className="furniture-catalogue-hero">
+      <div className="furniture-catalogue-body">
+        <a className="furniture-catalogue-back" href="/"><ArrowLeft size={18} aria-hidden="true"/>Retour à l’accès</a>
+        <h1>{current.label}</h1>
+      </div>
+    </header>
     <div className="furniture-catalogue-body">
-      <Link className="furniture-catalogue-back" href="/">Retour à l’accès</Link>
-      <h1>{current.label}</h1>
-      <p>Photos d’illustration. Origine de fabrication à confirmer auprès du fournisseur.</p>
+      <p>Photos d’illustration · Prix indicatifs en MAD</p>
       <FurnitureGallery photos={current.photos}/>
     </div>
   </main>;
