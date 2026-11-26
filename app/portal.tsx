@@ -7,7 +7,7 @@ import BuyerHubInsights from "@/app/buyer-hub-insights";
 import FurniturePreview from "@/app/furniture-preview";
 import { flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
-import { LockKeyhole, Eye, EyeOff, ShieldCheck, LogOut, Calculator, Clock, CheckCircle2, ChevronRight, Building2, UserRound, Mail, Phone, Loader2, Menu, Download, BadgePercent, Pause, Play } from "lucide-react";
+import { LockKeyhole, Eye, EyeOff, ShieldCheck, LogOut, Calculator, Clock, CheckCircle2, ChevronRight, Building2, UserRound, Mail, Phone, Loader2, Menu, Download, BadgePercent, Pause, Play, X } from "lucide-react";
 import { initializeClientVisit, endClientVisit, finishClientPage, isInternalVisitExit, prepareAdminVisit, forgetClientContinuation } from "@/lib/client-visit";
 import { DOCUMENT_TYPES, isDocumentKind, type DocumentKind } from "@/lib/document-types";
 import DocumentRequests from "@/app/document-requests";
@@ -15,7 +15,7 @@ import CityField from "@/app/city-field";
 import AccountPanel from "@/app/account-panel";
 import {RadioGroup,RadioGroupItem} from "@/components/ui/radio-group";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetClose } from "@/components/ui/sheet";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -266,7 +266,21 @@ export default function Portal({initialScreen,initialAccountMode="signup",initia
  </main>}
  <footer className="site-footer page-width"><Brand name={brandName}/><div className="footer-copyright"><span>© {new Date().getFullYear()} {brandName}</span>{screen==="hub"&&<a className="hub-admin-access" href="/admin" onClick={prepareAdminVisit} aria-label="Espace admin" title="Espace admin"><ShieldCheck size={12}/></a>}</div><button className="text-button" onClick={logout} disabled={busy}><LogOut size={15}/>Se déconnecter</button></footer></>}</div>}
  {buyer&&hasAccount&&<AccountPanel open={accountOpen} onOpenChange={setAccountOpen} buyer={buyer} onChangePassword={async values=>{const epoch=authEpoch.current;const d=await api("account-password",values);if(epoch!==authEpoch.current)return;if(d.buyer)setBuyer(d.buyer);setHasAccount(!!d.hasAccount);}}/>}
- <Sheet open={menuOpen} onOpenChange={setMenuOpen}><SheetContent className="mobile-sheet"><SheetTitle><Brand name={brandName}/></SheetTitle><SheetDescription>Votre espace acheteur public</SheetDescription><nav>{navigation.map(([id,label])=><button key={id} aria-label={label} title={label} onClick={()=>go(id)}><ServiceIcon id={id} size={40}/></button>)}<button onClick={()=>{setMenuOpen(false);logout();}} disabled={busy}><LogOut size={18}/>Se déconnecter</button></nav></SheetContent></Sheet>
+ <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+  <SheetContent className="buyer-mobile-menu" showCloseButton={false} aria-describedby={undefined}>
+   <SheetClose className="buyer-mobile-menu-close" aria-label="Fermer le menu"><X size={18} aria-hidden="true"/></SheetClose>
+   <SheetTitle className="buyer-mobile-menu-brand"><Brand name={brandName}/></SheetTitle>
+   <nav className="buyer-mobile-menu-nav" aria-label="Services BDG">
+    {navigation.map(([id,label])=><button key={id} type="button" className="buyer-mobile-menu-row" aria-current={(screen==="requests"?documentKind:screen)===id?"page":undefined} onClick={()=>go(id)}>
+     <span className="buyer-mobile-menu-icon" aria-hidden="true"><ServiceIcon id={id} size={32}/></span>
+     <span>{label}</span><ChevronRight size={16} aria-hidden="true"/>
+    </button>)}
+   </nav>
+   <div className="buyer-mobile-menu-footer">
+    <button type="button" className="buyer-mobile-menu-row" onClick={()=>{setMenuOpen(false);void logout();}} disabled={busy}><LogOut size={18} aria-hidden="true"/><span>Se déconnecter</span></button>
+   </div>
+  </SheetContent>
+ </Sheet>
  <Dialog open={!!receipt} onOpenChange={o=>!o&&setReceipt(null)}><DialogContent className="receipt-dialog"><div className="receipt-icon"><CheckCircle2 size={33}/></div><DialogTitle>Votre demande est enregistrée.</DialogTitle><DialogDescription>{receipt?.customerNotification==="sent"?"Un email de confirmation avec les informations de votre demande et le PDF a été envoyé à votre email de contact.":"Votre demande est enregistrée. L’envoi de votre confirmation par email n’a pas encore été confirmé. Vous pouvez télécharger votre PDF ici."}</DialogDescription><div className="receipt-reference"><span>Référence de votre demande</span><strong>{receipt?.orderId}</strong></div>{receipt?.total!==undefined&&<div className="receipt-total"><span>Remise d’achat enregistrée</span><strong>{money(receipt.discount||0)}</strong><small>Prix après remise : {money(receipt.total)}</small></div>}{receipt&&<p className="receipt-deadline">Le versement de votre remise d’achat est prévu sous 24 heures via le service choisi.</p>}{receipt?.pdfUrl&&<a className="primary-button pdf-download" href={receipt.pdfUrl} download><Download size={18}/>Télécharger le PDF</a>}<button className="secondary-button" onClick={()=>setReceipt(null)}>Continuer</button></DialogContent></Dialog>
  </TooltipProvider></>;
 }
