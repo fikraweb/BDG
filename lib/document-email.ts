@@ -1,0 +1,14 @@
+import type { Company } from "@/lib/company";
+import { documentLabel, type DocumentRequest, type IssuedDocument } from "@/lib/document-types";
+export function documentEmails(eventId: string, request: DocumentRequest, company: Company, issued?: IssuedDocument) {
+  const contact = issued?.draft.contact || request.contact;
+  const labelName = request.kind === "facture" && contact.procurementType === "marches" ? "Bordereau des prix – détail estimatif" : documentLabel(request.kind);
+  const label = labelName.toLowerCase();
+  const companyName = company.name.replace(/[\r\n]/g, " ");
+  const administrative = !!issued || request.origin === "admin";
+  const information = [(issued ? "Référence du document : " + issued.draft.number : "Référence de la demande : " + request.id), ...(contact.devisReference ? ["Référence du devis : " + contact.devisReference] : []), ...(contact.reference ? ["Référence du bon de commande / marché : " + contact.reference] : []), "Objet de la prestation : " + contact.objet, "", administrative ? "Coordonnées du client / maître d’ouvrage" : "Coordonnées du client", ...(!administrative ? ["Nom et prénom : " + contact.name] : []), (administrative ? "Client / Maître d’ouvrage : " : "Maître d’ouvrage : ") + contact.maitreOuvrage, "Téléphone : " + contact.phone, "Email : " + contact.email, ...(!administrative ? ["Ville : " + (contact.city || "Non renseignée")] : [])].join("\n");
+  const signature = "Cordialement,\nService clients\n" + companyName;
+  const companyText = issued ? "Le document « " + labelName + " » n° " + issued.draft.number + " a été préparé pour le client. Une copie du PDF est jointe à cet email." : "Une nouvelle demande de " + label + " a été enregistrée. Retrouvez-la dans Administration → Demandes pour préparer le document et l’envoyer au client. L’accusé de réception est joint à cet email.";
+  const clientText = issued ? "Veuillez trouver en pièce jointe votre " + label + " n° " + issued.draft.number + ". " + (request.origin === "admin" ? "Le document PDF contient le détail des prestations et les références correspondantes." : "Le document PDF contient l’ensemble des informations relatives à votre demande.") : "Nous vous confirmons l’enregistrement de votre demande de " + label + ". Notre service administratif la prendra en charge. Vous recevrez le document demandé par email dès sa préparation. L’accusé de réception joint reprend les informations de votre demande.";
+  return { contactEmail: contact.email, company: { subject: companyName + " · " + (issued ? labelName + " préparé" : "Nouvelle demande de " + label) + " · " + eventId, body: companyText + "\n\n" + information + "\n\n" + signature }, customer: { subject: companyName + " · " + (issued ? "Votre " + label : "Confirmation de votre demande de " + label) + " · " + eventId, body: "Bonjour " + contact.name + ",\n\n" + clientText + "\n\n" + information + "\n\n" + signature } };
+}

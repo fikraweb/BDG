@@ -1,0 +1,406 @@
+{
+  "/images/catalogue/office-20835.jpg": {
+    "sourceProductId": 20835,
+    "sourceProductTitle": "Bureau de Direction Design en MDF – Style Executive Haut de Gamme",
+    "existingProductIds": [
+      "office-20835"
+    ],
+    "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-design-en-mdf-style-executive-haut-de-gamme/",
+    "sourceMainImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/01/bureau-de-direction-design-en-mdf-style-executive-haut-de-gamme-2.jpg",
+    "verification": {
+      "sameProductGallery": true,
+      "visualInspectionPassed": true,
+      "sourceMainToExistingMainMeanAbsoluteRGBDifferenceAt200px": 0.3667
+    },
+    "sourceGalleryPhotoCountIncludingMain": 4,
+    "secondaryImages": [
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-20835-detail-01.jpg",
+        "label": "Bureau et retour avec rangement – vue côté utilisateur",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-design-en-mdf-style-executive-haut-de-gamme/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/01/bureau-de-direction-design-en-mdf-style-executive-haut-de-gamme-3.jpg",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-20835-detail-02.jpg",
+        "label": "Bureau de direction – vue d’ensemble",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-design-en-mdf-style-executive-haut-de-gamme/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/01/bureau-de-direction-design-en-mdf-style-executive-haut-de-gamme-4.jpg",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-20835-detail-03.jpg",
+        "label": "Détail du plateau et de la façade effet pierre",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-design-en-mdf-style-executive-haut-de-gamme/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/01/bureau-de-direction-design-en-mdf-style-executive-haut-de-gamme-1.jpg",
+        "width": 1024,
+        "height": 1024
+      }
+    ],
+    "limitation": null
+  },
+  "/images/catalogue/office-17845.jpg": {
+    "sourceProductId": 17845,
+    "sourceProductTitle": "Bureau de direction en bois foncé avec crédence latérale – Big Office",
+    "existingProductIds": [
+      "office-17845"
+    ],
+    "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-en-bois-fonce-avec-credence-laterale-big-office/",
+    "sourceMainImageUrl": "https://bigoffice.ma/wp-content/uploads/2025/09/Bureau-de-direction-280%C3%97200%C3%9775-cm-en-bois-fonce-avec-credence-%E2%80%93-Big-Office.jpg",
+    "verification": {
+      "sameProductGallery": true,
+      "visualInspectionPassed": true,
+      "sourceMainToExistingMainMeanAbsoluteRGBDifferenceAt200px": 0.5667
+    },
+    "sourceGalleryPhotoCountIncludingMain": 7,
+    "secondaryImages": [
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-17845-detail-01.jpg",
+        "label": "Détail de la crédence latérale",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-en-bois-fonce-avec-credence-laterale-big-office/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2025/09/Bureau-de-direction-280%C3%97200%C3%9775-cm-en-bois-fonce-avec-credence-%E2%80%93-BigOfficemaroc.jpg",
+        "width": 800,
+        "height": 800
+      },
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-17845-detail-02.jpg",
+        "label": "Caisson à tiroirs et niches de rangement",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-en-bois-fonce-avec-credence-laterale-big-office/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2025/09/Bureau-de-direction-280%C3%97200%C3%9775-cm-en-bois-fonce-avec-credence-%E2%80%93-BigOffice-maroc.jpg",
+        "width": 800,
+        "height": 800
+      },
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-17845-detail-03.jpg",
+        "label": "Bureau et crédence – vue côté utilisateur",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-en-bois-fonce-avec-credence-laterale-big-office/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2025/09/Bureau-de-direction-280%C3%97200%C3%9775-cm-en-bois-fonce-avec-credence-%E2%80%93-Big-Office-maroc.jpg",
+        "width": 800,
+        "height": 800
+      },
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-17845-detail-04.jpg",
+        "label": "Détail du plateau du bureau",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-en-bois-fonce-avec-credence-laterale-big-office/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2025/09/Bureau-de-direction-280%C3%97200%C3%9775-cm-en-bois-fonce-avec-credence-%E2%80%93-Big-Office-maroc-2.jpg",
+        "width": 800,
+        "height": 800
+      }
+    ],
+    "limitation": null
+  },
+  "/images/catalogue/office-17854.jpg": {
+    "sourceProductId": 17854,
+    "sourceProductTitle": "Bureau de Direction Moderne en Bois Noyer – Big Office Maroc",
+    "existingProductIds": [
+      "office-17854"
+    ],
+    "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-moderne-en-bois-noyer-big-office-maroc/",
+    "sourceMainImageUrl": "https://bigoffice.ma/wp-content/uploads/2025/09/bureau-direction-240cm-bois-noyer-bibliotheque-bigoffice.jpg.png",
+    "verification": {
+      "sameProductGallery": true,
+      "visualInspectionPassed": true,
+      "sourceMainToExistingMainMeanAbsoluteRGBDifferenceAt200px": 0.5304
+    },
+    "sourceGalleryPhotoCountIncludingMain": 5,
+    "secondaryImages": [
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-17854-detail-01.jpg",
+        "label": "Détail du caisson intégré et du panneau frontal",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-moderne-en-bois-noyer-big-office-maroc/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2025/09/bureau-direction-240cm-angle-droit-bois-mdf-noyer-bigoffice.jpg",
+        "width": 800,
+        "height": 800
+      },
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-17854-detail-02.jpg",
+        "label": "Crédence latérale – portes et rangement",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-moderne-en-bois-noyer-big-office-maroc/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2025/09/bureau-direction-240cm-retour-gauche-bois-noyer-bigoffice.jpg",
+        "width": 800,
+        "height": 800
+      },
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-17854-detail-03.jpg",
+        "label": "Bureau de direction – vue de face",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-moderne-en-bois-noyer-big-office-maroc/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2025/09/bureau-direction-240cm-bois-mdf-noyer-bigoffice.jpg",
+        "width": 800,
+        "height": 800
+      },
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-17854-detail-04.jpg",
+        "label": "Bureau et crédence – vue côté utilisateur",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-moderne-en-bois-noyer-big-office-maroc/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2025/09/bureau-direction-240cm-angle-gauche-bois-noyer-bigoffice.jpg.jpg",
+        "width": 800,
+        "height": 800
+      }
+    ],
+    "limitation": null
+  },
+  "/images/catalogue/office-5053.jpg": {
+    "sourceProductId": 5053,
+    "sourceProductTitle": "Bureau de Direction Design avec Retour Intégré – 220×200×75 cm",
+    "existingProductIds": [
+      "office-5053"
+    ],
+    "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-design-avec-retour-integre-220x200x75-cm/",
+    "sourceMainImageUrl": "https://bigoffice.ma/wp-content/uploads/2023/02/Bureau-president-moderne-avec-retour-integre-220x200x75-cm.png",
+    "verification": {
+      "sameProductGallery": true,
+      "visualInspectionPassed": true,
+      "sourceMainToExistingMainMeanAbsoluteRGBDifferenceAt200px": 0.6214
+    },
+    "sourceGalleryPhotoCountIncludingMain": 3,
+    "secondaryImages": [
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-5053-detail-01.png",
+        "label": "Bureau et bibliothèque assortie – vue de face",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-design-avec-retour-integre-220x200x75-cm/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2023/02/Bureau-de-direction-design-avec-pietement-incline.png",
+        "width": 1024,
+        "height": 1024
+      },
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-5053-detail-02.png",
+        "label": "Bureau et retour intégré – vue côté utilisateur",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-design-avec-retour-integre-220x200x75-cm/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2023/02/Mobilier-de-bureau-de-direction-professionnel-Maroc.png",
+        "width": 1536,
+        "height": 1024
+      }
+    ],
+    "limitation": null
+  },
+  "/images/catalogue/moroccan-27980.jpg": {
+    "sourceProductId": 27980,
+    "sourceProductTitle": "Bureau de direction en MDF noyer 160 × 80 cm avec retour mobile",
+    "existingProductIds": [
+      "moroccan-27980"
+    ],
+    "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-en-mdf-noyer-160-x-80-cm-avec-retour-mobile/",
+    "sourceMainImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/09/WhatsApp_Image_2026-09-05_at_10.23.11.jpeg_2K_202609060123.jpeg",
+    "verification": {
+      "sameProductGallery": true,
+      "visualInspectionPassed": true,
+      "sourceMainToExistingMainMeanAbsoluteRGBDifferenceAt200px": 0.2521
+    },
+    "sourceGalleryPhotoCountIncludingMain": 3,
+    "secondaryImages": [
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-27980-detail-01.jpg",
+        "label": "Retour et caisson à tiroirs – vue côté utilisateur",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-en-mdf-noyer-160-x-80-cm-avec-retour-mobile/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/09/WhatsApp_Image_2026-09-05_at_10.23.11-2.jpeg_2K_202609060127.jpeg",
+        "width": 2048,
+        "height": 2048
+      },
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-27980-detail-02.jpg",
+        "label": "Détail du plateau et de la façade",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-en-mdf-noyer-160-x-80-cm-avec-retour-mobile/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/09/WhatsApp_Image_2026-09-05_at_10.23.11.jpeg_202609060133.jpeg",
+        "width": 1024,
+        "height": 1024
+      }
+    ],
+    "limitation": null
+  },
+  "/images/catalogue-v19/bigoffice-27980.jpg": {
+    "sourceProductId": 27980,
+    "sourceProductTitle": "Bureau de direction en MDF noyer 160 × 80 cm avec retour mobile",
+    "existingProductIds": [
+      "premium-v19-27980",
+      "maroc-v19-27980"
+    ],
+    "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-en-mdf-noyer-160-x-80-cm-avec-retour-mobile/",
+    "sourceMainImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/09/WhatsApp_Image_2026-09-05_at_10.23.11.jpeg_2K_202609060123.jpeg",
+    "verification": {
+      "sameProductGallery": true,
+      "visualInspectionPassed": true,
+      "sourceMainToExistingMainMeanAbsoluteRGBDifferenceAt200px": 0.4064
+    },
+    "sourceGalleryPhotoCountIncludingMain": 3,
+    "secondaryImages": [
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-27980-detail-01.jpg",
+        "label": "Retour et caisson à tiroirs – vue côté utilisateur",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-en-mdf-noyer-160-x-80-cm-avec-retour-mobile/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/09/WhatsApp_Image_2026-09-05_at_10.23.11-2.jpeg_2K_202609060127.jpeg",
+        "width": 2048,
+        "height": 2048
+      },
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-27980-detail-02.jpg",
+        "label": "Détail du plateau et de la façade",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-en-mdf-noyer-160-x-80-cm-avec-retour-mobile/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/09/WhatsApp_Image_2026-09-05_at_10.23.11.jpeg_202609060133.jpeg",
+        "width": 1024,
+        "height": 1024
+      }
+    ],
+    "limitation": null
+  },
+  "/images/catalogue/moroccan-27689.jpg": {
+    "sourceProductId": 27689,
+    "sourceProductTitle": "Bureau de direction en bois MDF 180×80 cm avec retour et caisson intégré",
+    "existingProductIds": [
+      "moroccan-27689"
+    ],
+    "sourcePageUrl": "https://bigoffice.ma/product/27689/",
+    "sourceMainImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/08/Bureau-de-direction-en-bois-MDF-effet-noyer-180-%C3%97-80-%C3%97-75-cm-au-Maroc.jpeg",
+    "verification": {
+      "sameProductGallery": true,
+      "visualInspectionPassed": true,
+      "sourceMainToExistingMainMeanAbsoluteRGBDifferenceAt200px": 0.2434
+    },
+    "sourceGalleryPhotoCountIncludingMain": 2,
+    "secondaryImages": [
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-27689-detail-01.jpg",
+        "label": "Bureau et meuble retour – vue côté utilisateur",
+        "sourcePageUrl": "https://bigoffice.ma/product/27689/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/08/bureau-direction-180cm.jpeg",
+        "width": 1024,
+        "height": 1024
+      }
+    ],
+    "limitation": "La galerie originale ne publie qu’une photo supplémentaire de ce modèle. Aucune photo d’un autre produit n’a été ajoutée."
+  },
+  "/images/catalogue-v19/bigoffice-27689.jpg": {
+    "sourceProductId": 27689,
+    "sourceProductTitle": "Bureau de direction en bois MDF 180×80 cm avec retour et caisson intégré",
+    "existingProductIds": [
+      "premium-v19-27689",
+      "maroc-v19-27689"
+    ],
+    "sourcePageUrl": "https://bigoffice.ma/product/27689/",
+    "sourceMainImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/08/Bureau-de-direction-en-bois-MDF-effet-noyer-180-%C3%97-80-%C3%97-75-cm-au-Maroc.jpeg",
+    "verification": {
+      "sameProductGallery": true,
+      "visualInspectionPassed": true,
+      "sourceMainToExistingMainMeanAbsoluteRGBDifferenceAt200px": 0.3801
+    },
+    "sourceGalleryPhotoCountIncludingMain": 2,
+    "secondaryImages": [
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-27689-detail-01.jpg",
+        "label": "Bureau et meuble retour – vue côté utilisateur",
+        "sourcePageUrl": "https://bigoffice.ma/product/27689/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/08/bureau-direction-180cm.jpeg",
+        "width": 1024,
+        "height": 1024
+      }
+    ],
+    "limitation": "La galerie originale ne publie qu’une photo supplémentaire de ce modèle. Aucune photo d’un autre produit n’a été ajoutée."
+  },
+  "/images/catalogue/moroccan-27678.jpg": {
+    "sourceProductId": 27678,
+    "sourceProductTitle": "Bureau de direction en MDF avec retour mobile et caisson 3 tiroirs",
+    "existingProductIds": [
+      "moroccan-27678"
+    ],
+    "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-en-mdf-avec-retour-mobile-et-caisson-3-tiroirs/",
+    "sourceMainImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/08/Bureau-de-direction-en-MDF-noyer-avec-meuble-retour-mobile-et-caisson-3-tiroirs-au-Maroc.jpeg",
+    "verification": {
+      "sameProductGallery": true,
+      "visualInspectionPassed": true,
+      "sourceMainToExistingMainMeanAbsoluteRGBDifferenceAt200px": 0.2641
+    },
+    "sourceGalleryPhotoCountIncludingMain": 2,
+    "secondaryImages": [
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-27678-detail-01.jpg",
+        "label": "Bureau, retour, caisson et table basse – vue côté utilisateur",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-en-mdf-avec-retour-mobile-et-caisson-3-tiroirs/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/08/WhatsApp_Image_2026-08-21_at_17.39.05.jpeg_202608281026.jpeg",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "limitation": "La galerie originale ne publie qu’une photo supplémentaire de ce modèle. Aucune photo d’un autre produit n’a été ajoutée."
+  },
+  "/images/catalogue-v19/bigoffice-27678.jpg": {
+    "sourceProductId": 27678,
+    "sourceProductTitle": "Bureau de direction en MDF avec retour mobile et caisson 3 tiroirs",
+    "existingProductIds": [
+      "premium-v19-27678",
+      "maroc-v19-27678"
+    ],
+    "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-en-mdf-avec-retour-mobile-et-caisson-3-tiroirs/",
+    "sourceMainImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/08/Bureau-de-direction-en-MDF-noyer-avec-meuble-retour-mobile-et-caisson-3-tiroirs-au-Maroc.jpeg",
+    "verification": {
+      "sameProductGallery": true,
+      "visualInspectionPassed": true,
+      "sourceMainToExistingMainMeanAbsoluteRGBDifferenceAt200px": 0.4184
+    },
+    "sourceGalleryPhotoCountIncludingMain": 2,
+    "secondaryImages": [
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-27678-detail-01.jpg",
+        "label": "Bureau, retour, caisson et table basse – vue côté utilisateur",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-de-direction-en-mdf-avec-retour-mobile-et-caisson-3-tiroirs/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/08/WhatsApp_Image_2026-08-21_at_17.39.05.jpeg_202608281026.jpeg",
+        "width": 2048,
+        "height": 2048
+      }
+    ],
+    "limitation": "La galerie originale ne publie qu’une photo supplémentaire de ce modèle. Aucune photo d’un autre produit n’a été ajoutée."
+  },
+  "/images/catalogue/moroccan-28110.jpg": {
+    "sourceProductId": 28110,
+    "sourceProductTitle": "Bureau en bois MDF 140 x 70 x 75 cm avec caisson mobile",
+    "existingProductIds": [
+      "moroccan-28110"
+    ],
+    "sourcePageUrl": "https://bigoffice.ma/product/bureau-en-bois-mdf-140-x-70-x-75-cm-avec-caisson-mobile/",
+    "sourceMainImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/09/WhatsApp_Image_2026-09-12_at_12.58.39.jpeg_20260912130440.jpeg",
+    "verification": {
+      "sameProductGallery": true,
+      "visualInspectionPassed": true,
+      "sourceMainToExistingMainMeanAbsoluteRGBDifferenceAt200px": 0.2097
+    },
+    "sourceGalleryPhotoCountIncludingMain": 2,
+    "secondaryImages": [
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-28110-detail-01.jpg",
+        "label": "Bureau – vue de face",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-en-bois-mdf-140-x-70-x-75-cm-avec-caisson-mobile/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/09/WhatsApp_Image_2026-09-12_at_12.58.40.jpeg_20260912130206.jpeg",
+        "width": 1024,
+        "height": 1024
+      }
+    ],
+    "limitation": "La galerie originale ne publie qu’une photo supplémentaire de ce modèle. Aucune photo d’un autre produit n’a été ajoutée."
+  },
+  "/images/catalogue-v19/bigoffice-28110.jpg": {
+    "sourceProductId": 28110,
+    "sourceProductTitle": "Bureau en bois MDF 140 x 70 x 75 cm avec caisson mobile",
+    "existingProductIds": [
+      "premium-v19-28110",
+      "maroc-v19-28110"
+    ],
+    "sourcePageUrl": "https://bigoffice.ma/product/bureau-en-bois-mdf-140-x-70-x-75-cm-avec-caisson-mobile/",
+    "sourceMainImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/09/WhatsApp_Image_2026-09-12_at_12.58.39.jpeg_20260912130440.jpeg",
+    "verification": {
+      "sameProductGallery": true,
+      "visualInspectionPassed": true,
+      "sourceMainToExistingMainMeanAbsoluteRGBDifferenceAt200px": 0.3402
+    },
+    "sourceGalleryPhotoCountIncludingMain": 2,
+    "secondaryImages": [
+      {
+        "localPath": "/workspace/scratch/f1d4ebd2df24/tawzala-gallery-assets-v34/bigoffice-28110-detail-01.jpg",
+        "label": "Bureau – vue de face",
+        "sourcePageUrl": "https://bigoffice.ma/product/bureau-en-bois-mdf-140-x-70-x-75-cm-avec-caisson-mobile/",
+        "sourceImageUrl": "https://bigoffice.ma/wp-content/uploads/2026/09/WhatsApp_Image_2026-09-12_at_12.58.40.jpeg_20260912130206.jpeg",
+        "width": 1024,
+        "height": 1024
+      }
+    ],
+    "limitation": "La galerie originale ne publie qu’une photo supplémentaire de ce modèle. Aucune photo d’un autre produit n’a été ajoutée."
+  }
+}

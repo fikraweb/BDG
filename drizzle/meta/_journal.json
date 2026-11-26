@@ -1,0 +1,83 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1790800432747,
+      "tag": "0000_spicy_omega_flight",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1790805960884,
+      "tag": "0001_kind_big_bertha",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790811260773,
+      "tag": "0002_nebulous_hardball",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1790876074576,
+      "tag": "0003_flimsy_felicia_hardy",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1790879910602,
+      "tag": "0004_many_the_watchers",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1790901300863,
+      "tag": "0005_early_thunderball",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1790906300206,
+      "tag": "0006_glamorous_microbe",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1790959396856,
+      "tag": "0007_ambiguous_starbolt",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1790967278537,
+      "tag": "0008_sleepy_the_twelve",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1790974738645,
+      "tag": "0009_closed_betty_brant",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1790980490104,
+      "tag": "0010_brainy_katie_power",
+      "breakpoints": true
+    }
+  ]
+}

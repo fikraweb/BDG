@@ -1,0 +1,1 @@
+ALTER TABLE `buyers` ADD `maitre_ouvrage` text;
